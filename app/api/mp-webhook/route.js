@@ -1,14 +1,19 @@
 /**
  * POST /api/mp-webhook — o Mercado Pago avisa aqui quando algo muda.
  *
- * O aviso traz só um id, e qualquer um pode forjar esse POST. Por isso a
- * confirmação não vem do corpo recebido: lemos a ordem direto na API do MP
- * e só liberamos se ela estiver paga de verdade.
+ * O aviso traz so um id, e qualquer um pode forjar esse POST. Por isso a
+ * confirmacao nao vem do corpo recebido: lemos a cobranca direto na API do
+ * MP e so liberamos se ela estiver paga de verdade.
  *
- * Responde 200 sempre que entendeu o aviso, mesmo sem ter o que fazer —
- * o MP reenvia o que não voltar 200, e não queremos fila de reenvio à toa.
+ * Qual id vem depende do evento configurado no painel — "Order" manda o id
+ * da ordem, "Pagamentos (legacy)" manda o id do pagamento. O resolver tenta
+ * os dois, entao a escolha la nao quebra isso aqui.
+ *
+ * Responde 200 sempre que entendeu o aviso, mesmo sem ter o que fazer. 500
+ * so em falha nossa, porque e ele que faz o MP reenviar: devolver 500 num
+ * aviso que nunca vai dar certo cria um looping de reenvio.
  */
-import { lerOrdem, estaPago, liberar } from "@/lib/oferta";
+import { resolverAviso, liberar } from "@/lib/oferta";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,7 +25,7 @@ export async function POST(req) {
   try {
     aviso = await req.json();
   } catch {
-    return ok({ ignorado: "corpo ilegível" });
+    return ok({ ignorado: "corpo ilegivel" });
   }
 
   const id =
@@ -30,22 +35,21 @@ export async function POST(req) {
   if (!id) return ok({ ignorado: "sem id" });
 
   try {
-    const ordem = await lerOrdem(id);
-    const codigo = String(ordem?.external_reference || "").toUpperCase();
-    if (!codigo) return ok({ ignorado: "ordem sem código" });
+    const cobranca = await resolverAviso(id);
+    if (!cobranca) return ok({ ignorado: "id desconhecido", id });
 
-    if (!estaPago(ordem))
-      return ok({ codigo, status: ordem?.status || "pendente" });
+    const { codigo, pago, onde } = cobranca;
+    if (!pago) return ok({ codigo, status: "pendente", onde });
 
     const pedido = await liberar(codigo);
     console.log("pago:", codigo, pedido.planilha ? "planilha ok" : pedido.erroPlanilha);
     return ok({ codigo, status: "pago" });
   } catch (e) {
     console.error("webhook:", e);
-    // 500 faz o MP tentar de novo, que é o que queremos numa falha nossa.
+    // 500 faz o MP tentar de novo, que e o que queremos numa falha nossa.
     return Response.json({ erro: String(e.message || e) }, { status: 500 });
   }
 }
 
-// O MP às vezes valida o endereço com um GET antes de usar.
+// O MP as vezes valida o endereco com um GET antes de usar.
 export const GET = () => ok({ ok: true });
