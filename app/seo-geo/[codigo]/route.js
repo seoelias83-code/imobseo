@@ -57,9 +57,15 @@ export async function GET(_req, { params }) {
     precoAgora: reais(PRECO),
     precoDepois: reais(PRECO_DEPOIS),
     deadline: prazo(abertura),
-    exemplos: Array.isArray(oferta.exemplos) ? oferta.exemplos.slice(0, 3) : [],
+    // o brinde: os titulos que a pagina entrega de graca. Vem da lista
+    // completa, cortada no tamanho do brinde combinado (100 por padrao).
+    brinde: (Array.isArray(oferta.titulos) && oferta.titulos.length
+      ? oferta.titulos
+      : oferta.exemplos || []
+    ).slice(0, Number(oferta.gratis || 100)),
     jaPago: pedido?.status === "pago",
     planilha: pedido?.planilha || "",
+    whatsapp: oferta.whatsapp || process.env.WHATSAPP || "",
   };
 
   const molde = await readFile(

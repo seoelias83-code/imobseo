@@ -196,6 +196,17 @@ h1 em{font-style:normal;color:var(--brass)}
 .kw b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
 .kw .none{color:var(--ink-2);font-style:italic}
 .kw .tot{color:var(--ink);font-weight:600}
+.lin{display:flex;align-items:baseline;gap:10px}
+.lin .n{font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums;flex:0 0 auto;padding-top:3px}
+.copiar{
+  font:inherit;font-size:12px;font-weight:600;cursor:pointer;align-self:flex-start;
+  background:none;border:1px solid var(--line);border-radius:var(--r);
+  color:var(--ink-2);padding:6px 10px;transition:border-color .2s,color .2s;
+}
+.copiar:hover{border-color:var(--brass);color:var(--brass)}
+.copiar[data-ok="1"]{border-color:var(--brass);color:var(--brass)}
+.mais-wrap{display:flex;justify-content:center;margin-top:18px}
+.mais-wrap .btn-sec{width:auto;padding-inline:26px}
 .side.after .kw .tot b{color:var(--brass)}
 
 /* ---------- oferta ---------- */
@@ -257,6 +268,13 @@ body.expirado .price-now{color:var(--alert)}
 }
 @keyframes pulso{0%,100%{opacity:.25}50%{opacity:1}}
 .pago{display:flex;flex-direction:column;gap:14px}
+.aplicar{
+  border-top:1px solid var(--line);padding-top:16px;margin-top:4px;
+  display:flex;flex-direction:column;gap:8px;align-items:flex-start;
+}
+.aplicar b{font-size:15px}
+.aplicar p{font-size:14px;color:var(--ink-2)}
+.aplicar .btn-sec{text-decoration:none;width:auto;padding-inline:18px}
 .pago .selo{
   font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--brass);
 }
@@ -333,7 +351,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
           <span class="tag demo" id="demoFlag">Dados de exemplo</span>
         </div>
         <h1>Seja a próxima imobiliária a aparecer no Google em <em id="cidade">Sorocaba</em></h1>
-        <p class="lead">Lemos as páginas de imóvel do seu site e reescrevemos os títulos usando só o que já está em cada página. Os <b>100 primeiros estão prontos</b>, de graça, na planilha que você acabou de receber.</p>
+        <p class="lead">Os títulos do site da <b id="nomeLead">sua imobiliária</b>, reescritos com os dados que já estão em cada página. <b id="leadQtd">100 deles</b> estão aqui embaixo, prontos pra copiar. São seus, sem cadastro.</p>
         <div class="stats">
           <div class="stat"><span class="k">Páginas no site</span><span class="v num" id="sPaginas">3.070</span></div>
           <div class="stat"><span class="k">Já analisadas</span><span class="v num" id="sAnalisadas">1.396</span></div>
@@ -363,10 +381,11 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 
   <section class="band">
     <div class="wrap">
-      <span class="eyebrow">Os 100 que já são seus</span>
+      <span class="eyebrow" id="brindeEyebrow">Seu presente · 90 títulos</span>
       <h2 style="margin-top:10px">Título atual à esquerda, otimizado à direita</h2>
-      <p class="body" style="margin-top:12px">Abaixo de cada um, as palavras ativas: termos da lista de buscas do Google que aparecem exatos no título, com as buscas/mês de cada uma.</p>
+      <p class="body" style="margin-top:12px">Abaixo de cada um, as palavras ativas: termos da lista de buscas do Google que aparecem exatos no título, com as buscas/mês de cada uma. Clica em copiar e cola no campo de título da página do imóvel.</p>
       <div class="pairs" id="pairs"></div>
+      <div class="mais-wrap"><button class="btn-sec" id="verMais" type="button" hidden>Ver os 90</button></div>
     </div>
   </section>
 
@@ -386,12 +405,12 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
         </div>
 
         <div class="price-card">
-          <div class="clock">
+          <div class="clock" id="blocoClock">
             <span class="eyebrow" id="clockLabel">Este preço acaba em</span>
             <span class="t num" id="bigClock">24:00:00</span>
             <span class="u"><span>horas</span><span>min</span><span>seg</span></span>
           </div>
-          <div class="price-row">
+          <div class="price-row" id="blocoPreco">
             <span class="price-now num" id="bigPrice">R$ 9,99</span>
             <span class="price-was" id="bigWas">depois das 24h, <s>R$ 298,00</s> &rarr; R$ 298,00</span>
           </div>
@@ -427,6 +446,11 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
             <h3>Os 1.000 títulos estão prontos</h3>
             <a class="cta" id="linkPlanilha" href="#" target="_blank" rel="noopener">Abrir a planilha</a>
             <p class="fine" id="finePago">Título e URL lado a lado. É só copiar e colar na sua plataforma.</p>
+            <div class="aplicar">
+              <b>Não quer colar 1.000 títulos na mão?</b>
+              <p>A gente aplica no site de vocês, página por página. Chama no WhatsApp que eu te passo como funciona.</p>
+              <a class="btn-sec" id="btnAplicar" href="#" target="_blank" rel="noopener">Falar no WhatsApp</a>
+            </div>
           </div>
         </div>
       </div>
@@ -447,7 +471,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
       </div>
 
       <div class="faq">
-        <details open><summary>Por que R$ 9,99 e não de graça?</summary><p>Os 100 primeiros são de graça para você conferir o método. Os 1.000 seguintes custam porque é processamento de verdade: ler o site inteiro, cruzar com a lista de buscas e montar linha por linha.</p></details>
+        <details open><summary>Por que R$ 9,99 e não de graça?</summary><p>Os 100 primeiros são de graça para você conferir o método: 10 no PDF e 90 nesta página. Os 1.000 seguintes custam porque é processamento de verdade: ler o site inteiro, cruzar com a lista de buscas e montar linha por linha.</p></details>
         <details><summary>O que acontece quando o relógio zera?</summary><p>O pacote de 1.000 passa a custar R$ 298,00. O relógio começou na primeira vez que esta página abriu e não reinicia se você fechar ou abrir em outro aparelho.</p></details>
         <details><summary>Vou precisar trocar de plataforma?</summary><p>Não. O título é um campo de texto na página do imóvel. Funciona em qualquer plataforma, inclusive nas que geram o título sozinhas.</p></details>
         <details><summary>E as páginas que sobram?</summary><p>Depois dos 1.000 ainda restam páginas no seu site. Quando quiser fechar o restante, a gente combina no WhatsApp.</p></details>
@@ -475,6 +499,7 @@ const $  = id => document.getElementById(id);
 $("codigo").textContent    = DATA.codigo;
 $("footCode").textContent  = "Código " + DATA.codigo;
 $("nomeTag").textContent   = DATA.imobiliaria;
+$("nomeLead").textContent  = DATA.imobiliaria || "sua imobiliária";
 $("cidade").textContent    = DATA.cidade;
 $("sPaginas").textContent  = br(DATA.paginas);
 $("sAnalisadas").textContent = br(DATA.analisadas);
@@ -532,19 +557,66 @@ function kwBlock(list){
   return list.map(([k,v])=>`<div><span>${k}</span><b>${br(v)}</b></div>`).join("")
        + `<div class="tot"><span>Total</span><b>${br(total)}/mês</b></div>`;
 }
-$("pairs").innerHTML = DATA.exemplos.map(e => `
+const brinde = DATA.brinde || DATA.exemplos || [];
+const ABERTOS = 6;   // quantos aparecem antes de clicar em "Ver os 90"
+
+const plural = brinde.length === 1 ? " título" : " títulos";
+$("brindeEyebrow").textContent = "Seu presente · " + brinde.length + plural;
+$("leadQtd").textContent = brinde.length + plural;
+
+function cartao(e, i) {
+  return `
   <article class="pair">
     <div class="side before">
       <span class="eyebrow">Atual</span>
-      <p class="tt">${e.antes}</p>
+      <div class="lin"><span class="n num">${String(i + 1).padStart(2, "0")}</span>
+        <p class="tt">${e.antes || "—"}</p></div>
       <div class="kw">${kwBlock(e.antesKw)}</div>
     </div>
     <div class="side after">
       <span class="eyebrow">Otimizado</span>
       <p class="tt">${e.depois}</p>
       <div class="kw">${kwBlock(e.depoisKw)}</div>
+      <button class="copiar" type="button" data-i="${i}">Copiar título</button>
     </div>
-  </article>`).join("");
+  </article>`;
+}
+
+let tudoAberto = false;
+function pintarBrinde() {
+  const lista = tudoAberto ? brinde : brinde.slice(0, ABERTOS);
+  $("pairs").innerHTML = lista.map(cartao).join("");
+  const btn = $("verMais");
+  btn.hidden = brinde.length <= ABERTOS;
+  btn.textContent = tudoAberto
+    ? "Mostrar menos"
+    : "Ver os " + brinde.length;
+}
+pintarBrinde();
+
+$("verMais").addEventListener("click", () => {
+  tudoAberto = !tudoAberto;
+  pintarBrinde();
+  if (!tudoAberto) $("pairs").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+// Copiar fica no container: os cartoes sao redesenhados, os listeners nao.
+$("pairs").addEventListener("click", async ev => {
+  const btn = ev.target.closest(".copiar");
+  if (!btn) return;
+  const texto = brinde[Number(btn.dataset.i)]?.depois || "";
+  try {
+    await navigator.clipboard.writeText(texto);
+    btn.textContent = "Copiado";
+  } catch {
+    const sel = window.getSelection(), faixa = document.createRange();
+    faixa.selectNodeContents(btn.closest(".side").querySelector(".tt"));
+    sel.removeAllRanges(); sel.addRange(faixa);
+    btn.textContent = "Selecionado, Cmd+C";
+  }
+  btn.dataset.ok = "1";
+  setTimeout(() => { btn.textContent = "Copiar título"; delete btn.dataset.ok; }, 2400);
+});
 
 /* ---- relógio ---- */
 const fim = DATA.deadline ? new Date(DATA.deadline).getTime()
@@ -556,6 +628,8 @@ $("barPrice").textContent = "R$ " + DATA.precoAgora;
 $("bigPrice").textContent = "R$ " + DATA.precoAgora;
 
 let expirado = false;
+// declarado aqui porque tick() roda antes de concluir() existir
+let relogioParado = false;
 function expira(){
   if(expirado) return;
   expirado = true;
@@ -568,6 +642,7 @@ function expira(){
   $("ctaFine").textContent = "O preço de lançamento acabou. O pacote continua disponível pelo valor cheio.";
 }
 function tick(){
+  if (relogioParado) return;
   const ms = fim - Date.now();
   if(ms <= 0){ $("barClock").textContent = $("bigClock").textContent = "00:00:00"; expira(); return; }
   const h = Math.floor(ms/3600000),
@@ -635,6 +710,13 @@ $("btnCopiar").addEventListener("click", async () => {
 });
 
 function concluir(planilha) {
+  // quem ja pagou nao tem mais prazo nem preco pra ver
+  relogioParado = true;
+  $("blocoClock").hidden = true;
+  $("blocoPreco").hidden = true;
+  $("barClock").closest(".chip").hidden = true;
+  $("barPrice").closest(".chip").hidden = true;
+
   const link = $("linkPlanilha");
   if (planilha) {
     link.href = planilha;
@@ -661,6 +743,17 @@ function vigiar() {
     setTimeout(bater, espera);
   };
   setTimeout(bater, espera);
+}
+
+/* Link do WhatsApp pra quem já pagou e quer que a gente aplique. */
+if (DATA.whatsapp) {
+  const n = String(DATA.whatsapp).replace(/\D/g, "");
+  const msg = "Paguei os 1.000 títulos do " + DATA.codigo +
+              " e quero que vocês apliquem no site.";
+  $("btnAplicar").href = "https://wa.me/" + (n.startsWith("55") ? n : "55" + n) +
+                         "?text=" + encodeURIComponent(msg);
+} else {
+  $("btnAplicar").hidden = true;
 }
 
 /* Reabriu a página depois de pagar: já mostra a planilha. */
