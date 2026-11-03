@@ -205,7 +205,7 @@ h1 em{font-style:normal;color:var(--brass)}
 }
 .copiar:hover{border-color:var(--brass);color:var(--brass)}
 .copiar[data-ok="1"]{border-color:var(--brass);color:var(--brass)}
-.mais-wrap{display:flex;justify-content:center;margin-top:18px}
+.mais-wrap{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
 .mais-wrap .btn-sec{width:auto;padding-inline:26px}
 .side.after .kw .tot b{color:var(--brass)}
 
@@ -383,9 +383,12 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
     <div class="wrap">
       <span class="eyebrow" id="brindeEyebrow">Seu presente · 90 títulos</span>
       <h2 style="margin-top:10px">Título atual à esquerda, otimizado à direita</h2>
-      <p class="body" style="margin-top:12px">Abaixo de cada um, as palavras ativas: termos da lista de buscas do Google que aparecem exatos no título, com as buscas/mês de cada uma. Clica em copiar e cola no campo de título da página do imóvel.</p>
+      <p class="body" style="margin-top:12px">Abaixo de cada um, as palavras ativas: termos da lista de buscas do Google que aparecem exatos no título, com as buscas/mês de cada uma. Clica em copiar e cola no campo de título da página do imóvel, ou baixa a planilha inteira pra repassar pra equipe.</p>
       <div class="pairs" id="pairs"></div>
-      <div class="mais-wrap"><button class="btn-sec" id="verMais" type="button" hidden>Ver os 90</button></div>
+      <div class="mais-wrap">
+        <button class="btn-sec" id="baixar" type="button">Baixar a planilha</button>
+        <button class="btn-sec" id="verMais" type="button" hidden>Ver os 90</button>
+      </div>
     </div>
   </section>
 
@@ -744,6 +747,38 @@ function vigiar() {
   };
   setTimeout(bater, espera);
 }
+
+/* Baixar a planilha dos títulos do brinde.
+   Feito aqui mesmo, sem servidor: ponto-e-vírgula e BOM porque é o que o
+   Excel em português abre sem perguntar nada. */
+$("baixar").addEventListener("click", () => {
+  const celula = v => {
+    const t = String(v ?? "");
+    return /[";\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+  };
+  const kwTexto = ts => (ts || []).map(([t, v]) => t + " (" + br(v) + "/mês)").join("\n");
+
+  const linhas = [
+    ["#", "Página", "Título atual", "Palavras ativas (atual)",
+     "Título otimizado", "Palavras ativas (otimizado)"],
+    ...brinde.map((e, i) => [
+      i + 1, e.url || "", e.antes || "",
+      kwTexto(e.antesKw) || "nenhuma", e.depois || "", kwTexto(e.depoisKw),
+    ]),
+  ];
+
+  const csv = "\uFEFF" + linhas.map(l => l.map(celula).join(";")).join("\r\n");
+  const nome = "titulos-" + (DATA.codigo || "site").toLowerCase() + ".csv";
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  const a = document.createElement("a");
+  a.href = url; a.download = nome;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  const btn = $("baixar");
+  btn.textContent = "Baixado";
+  setTimeout(() => { btn.textContent = "Baixar a planilha"; }, 2600);
+});
 
 /* Link do WhatsApp pra quem já pagou e quer que a gente aplique. */
 if (DATA.whatsapp) {
