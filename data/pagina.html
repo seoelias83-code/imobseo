@@ -201,6 +201,12 @@ h1 em{font-style:normal;color:var(--brass)}
 .kw .none{color:var(--ink-2);font-style:italic}
 .kw .tot{color:var(--ink);font-weight:600}
 .lin{display:flex;align-items:baseline;gap:10px}
+.url{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
+  color:var(--ink-2);text-decoration:none;overflow-wrap:anywhere;
+  border-bottom:1px solid var(--line);align-self:flex-start;padding-bottom:1px;
+}
+.url:hover{color:var(--brass);border-color:var(--brass)}
 .lin .n{font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums;flex:0 0 auto;padding-top:3px}
 .copiar{
   font:inherit;font-size:12px;font-weight:600;cursor:pointer;align-self:flex-start;
@@ -595,11 +601,25 @@ $("sGanho").textContent = antesTot > 0
 $("leadQtd").innerHTML = "<b>" + brinde.length + plural + "</b> " +
   (brinde.length === 1 ? "está" : "estão");
 
+/* O caminho da página, sem o domínio, que se repete em todas e só ocupa espaço.
+   O link inteiro fica no href, pra abrir a página de verdade. */
+function pagina(url) {
+  if (!url) return "";
+  let curto = url;
+  try {
+    const u = new URL(url);
+    curto = (u.pathname + u.search).replace(/\/$/, "") || "/";
+  } catch {}
+  const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  return `<a class="url" href="${esc(url)}" target="_blank" rel="noopener" title="${esc(url)}">${esc(curto)}</a>`;
+}
+
 function cartao(e, i) {
   return `
   <article class="pair">
     <div class="side before">
       <span class="eyebrow">Atual</span>
+      ${pagina(e.url)}
       <div class="lin"><span class="n num">${String(i + 1).padStart(2, "0")}</span>
         <p class="tt">${e.antes || "—"}</p></div>
       <div class="kw">${kwBlock(e.antesKw)}</div>
