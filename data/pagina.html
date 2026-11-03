@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITULO__</title>
+<meta name="robots" content="noindex, nofollow">
+<style>:root{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0);color-scheme:light}
+body{margin:0;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+
+<style>
+/* Layout: coluna de argumento à esquerda, prédio de andares à direita.
+   O prédio é a métrica: 1 andar = 100 páginas do site. */
+:root{
+  --paper:#F1F3EF;
+  --surface:#FFFFFF;
+  --ink:#16211C;
+  --ink-2:#5A6B62;
+  --line:#D7DDD6;
+  --brass:#8A6224;
+  --brass-fill:#B4873F;
+  --brass-soft:#EFE5D2;
+  --alert:#8C3A2B;
+
+  --display:"Newsreader",Georgia,"Times New Roman",serif;
+  --ui:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  --maxw:1120px;
+  --r:3px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1411;
+    --surface:#141D18;
+    --ink:#E7EDE7;
+    --ink-2:#93A69B;
+    --line:#26332C;
+    --brass:#D9B269;
+    --brass-fill:#C79949;
+    --brass-soft:#2A2317;
+    --alert:#DA7A65;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1411;
+  --surface:#141D18;
+  --ink:#E7EDE7;
+  --ink-2:#93A69B;
+  --line:#26332C;
+  --brass:#D9B269;
+  --brass-fill:#C79949;
+  --brass-soft:#2A2317;
+  --alert:#DA7A65;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--ui);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0 0 auto;
+  height:env(safe-area-inset-top,0px);
+  background:var(--surface);z-index:30;
+}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+
+.wrap{
+  max-width:var(--maxw);margin:0 auto;
+  padding-left:max(20px,env(safe-area-inset-left,0px));
+  padding-right:max(20px,env(safe-area-inset-right,0px));
+}
+.band{border-top:1px solid var(--line)}
+.band > .wrap{padding-block:clamp(40px,6vw,76px)}
+
+.eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);
+}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- barra fixa ---------- */
+.bar{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+  background:var(--surface);border-bottom:1px solid var(--line);
+}
+.bar-in{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding-block:10px;
+}
+.mark{font-family:var(--display);font-size:16px;letter-spacing:.01em;margin-right:auto}
+.mark b{font-weight:500}
+.mark span{color:var(--ink-2)}
+.chip{
+  display:inline-flex;align-items:baseline;gap:8px;
+  border:1px solid var(--line);border-radius:999px;
+  padding:5px 14px;background:var(--paper);
+  font-size:13px;
+}
+.chip .lbl{color:var(--ink-2);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.chip .val{font-weight:600;font-variant-numeric:tabular-nums}
+.bar .chip .val{color:var(--brass)}
+body.expirado .bar .chip .val{color:var(--alert)}
+
+/* ---------- hero ---------- */
+.hero{display:grid;gap:clamp(32px,5vw,56px);grid-template-columns:1fr}
+@media(min-width:900px){ .hero{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:start} }
+.hero-txt{min-width:0;display:flex;flex-direction:column;gap:20px}
+.codigo{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.codigo .tag{
+  border:1px solid var(--line);border-radius:var(--r);padding:3px 8px;
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--ink-2);
+}
+.demo{border-color:var(--brass);color:var(--brass)}
+h1{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(34px,5.4vw,56px);line-height:1.06;letter-spacing:-.015em;
+}
+h1 em{font-style:normal;color:var(--brass)}
+.lead{color:var(--ink-2);font-size:clamp(16px,1.7vw,18px);max-width:54ch}
+
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r)}
+.stat{background:var(--surface);padding:14px 16px;min-width:0}
+.stat .k{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.stat .v{display:block;font-family:var(--display);font-size:clamp(22px,3vw,30px);line-height:1.15;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat.gain .v{color:var(--brass)}
+@media(max-width:560px){ .stats{grid-template-columns:1fr} }
+
+/* ---------- prédio ---------- */
+.tower-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px;display:flex;flex-direction:column;gap:16px;
+}
+.tower-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.tower-head .q{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
+.tower-wrap{display:flex;justify-content:center}
+.tower{
+  width:100%;max-width:200px;display:flex;flex-direction:column-reverse;gap:3px;
+}
+.floor{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:3px;
+  height:11px;
+}
+.floor i{
+  display:block;background:var(--line);border-radius:1px;
+  transition:background .45s ease;
+}
+.floor.on i{background:var(--brass-fill)}
+.floor.next i{background:var(--brass-soft)}
+.roof{
+  height:9px;margin:0 auto 3px;width:62%;
+  border:1px solid var(--line);border-bottom:none;border-radius:2px 2px 0 0;
+}
+.tower-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-2)}
+.tower-legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:1px;display:inline-block}
+.sw.on{background:var(--brass-fill)}
+.sw.next{background:var(--brass-soft);border:1px solid var(--line)}
+.sw.off{background:var(--line)}
+.btn-ghost{
+  font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+  background:none;border:1px solid var(--line);border-radius:var(--r);
+  color:var(--ink);padding:9px 14px;width:100%;
+  transition:border-color .2s,color .2s;
+}
+.btn-ghost:hover{border-color:var(--brass);color:var(--brass)}
+.btn-ghost[aria-pressed="true"]{border-color:var(--brass);color:var(--brass);background:var(--brass-soft)}
+
+/* ---------- títulos antes/depois ---------- */
+.pairs{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+.pair{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  display:grid;grid-template-columns:1fr;gap:1px;overflow:hidden;
+}
+@media(min-width:820px){ .pair{grid-template-columns:1fr 1fr;background:var(--line)} }
+.side{background:var(--surface);padding:16px 18px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.side .tt{font-family:var(--display);font-size:17px;line-height:1.35;overflow-wrap:anywhere}
+.side.after .tt{color:var(--ink)}
+.side.before .tt{color:var(--ink-2)}
+.kw{display:flex;flex-direction:column;gap:5px;margin-top:auto;padding-top:8px;border-top:1px dashed var(--line)}
+.kw div{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:var(--ink-2)}
+.kw b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.kw .none{color:var(--ink-2);font-style:italic}
+.kw .tot{color:var(--ink);font-weight:600}
+.side.after .kw .tot b{color:var(--brass)}
+
+/* ---------- oferta ---------- */
+.offer{background:var(--surface)}
+.offer-grid{display:grid;gap:clamp(28px,4vw,48px);grid-template-columns:1fr}
+@media(min-width:900px){ .offer-grid{grid-template-columns:minmax(0,1fr) minmax(0,420px)} }
+.price-card{
+  border:1px solid var(--ink);border-radius:var(--r);padding:clamp(20px,3vw,28px);
+  display:flex;flex-direction:column;gap:18px;background:var(--paper);
+}
+body.expirado .price-card{border-color:var(--line)}
+.clock{display:flex;flex-direction:column;gap:6px}
+.clock .t{
+  font-family:var(--ui);font-weight:600;font-variant-numeric:tabular-nums;
+  font-size:clamp(38px,7vw,52px);line-height:1;letter-spacing:-.02em;color:var(--brass);
+}
+body.expirado .clock .t{color:var(--alert)}
+.clock .u{display:flex;gap:0;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.clock .u span{flex:1 1 0;min-width:0}
+.price-row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.price-now{font-family:var(--display);font-size:clamp(34px,5vw,44px);line-height:1;font-variant-numeric:tabular-nums}
+.price-was{color:var(--ink-2);font-size:15px}
+.price-was s{text-decoration-thickness:1px}
+body.expirado .price-now{color:var(--alert)}
+.cta{
+  display:block;text-align:center;text-decoration:none;
+  background:var(--ink);color:var(--paper);
+  font-weight:600;font-size:16px;padding:16px 20px;border-radius:var(--r);
+  transition:background .2s,transform .12s;
+}
+.cta:hover{background:var(--brass)}
+.cta:active{transform:translateY(1px)}
+.fine{font-size:13px;color:var(--ink-2)}
+
+/* passos do pagamento */
+.passo{display:flex;flex-direction:column;gap:12px}
+.campo{display:flex;flex-direction:column;gap:6px}
+.campo label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.campo input{
+  font:inherit;font-size:16px;padding:13px 14px;border-radius:var(--r);
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%;
+}
+.campo input:focus{border-color:var(--brass);outline:none}
+.aviso{font-size:13px;color:var(--alert);min-height:0}
+.pix-qr{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:12px;align-self:center;line-height:0;
+}
+.pix-qr img{width:min(210px,52vw);height:auto;display:block;image-rendering:pixelated}
+.copia{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.45;
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--r);
+  padding:11px 12px;overflow-wrap:anywhere;color:var(--ink-2);
+}
+.esperando{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--ink-2)}
+.pulso{
+  width:9px;height:9px;border-radius:50%;background:var(--brass-fill);flex:0 0 auto;
+  animation:pulso 1.4s ease-in-out infinite;
+}
+@keyframes pulso{0%,100%{opacity:.25}50%{opacity:1}}
+.pago{display:flex;flex-direction:column;gap:14px}
+.pago .selo{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--brass);
+}
+.pago h3{font-family:var(--display);font-weight:400;font-size:clamp(24px,4vw,32px);line-height:1.1}
+.btn-sec{
+  font:inherit;font-size:14px;font-weight:600;cursor:pointer;background:none;
+  border:1px solid var(--line);border-radius:var(--r);color:var(--ink);padding:11px 14px;
+  transition:border-color .2s,color .2s;
+}
+.btn-sec:hover{border-color:var(--brass);color:var(--brass)}
+.cta[disabled]{opacity:.55;cursor:default}
+.offer-txt{display:flex;flex-direction:column;gap:18px;min-width:0}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,38px);line-height:1.12;letter-spacing:-.01em}
+.body{color:var(--ink-2);max-width:56ch}
+.ticks{display:flex;flex-direction:column;gap:9px;margin:0;padding:0;list-style:none}
+.ticks li{display:flex;gap:11px;align-items:flex-start;font-size:15px}
+.ticks li::before{content:"";flex:0 0 auto;width:7px;height:7px;margin-top:8px;background:var(--brass-fill);border-radius:1px}
+
+/* ---------- passos ---------- */
+.steps{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);margin-top:28px}
+@media(min-width:760px){ .steps{grid-template-columns:repeat(3,1fr)} }
+.step{background:var(--paper);padding:20px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.step .n{font-family:var(--display);font-size:26px;color:var(--brass);line-height:1;font-variant-numeric:tabular-nums}
+.step h3{font-size:15px;font-weight:600}
+.step p{font-size:14px;color:var(--ink-2)}
+
+/* ---------- garantia ---------- */
+.guarantee{
+  border:1px solid var(--line);border-left:3px solid var(--brass-fill);border-radius:var(--r);
+  background:var(--surface);padding:clamp(20px,3vw,28px);
+  display:flex;flex-direction:column;gap:10px;max-width:62ch;
+}
+.guarantee h2{font-size:clamp(22px,3vw,28px)}
+
+/* ---------- faq ---------- */
+.faq{margin-top:24px;border-top:1px solid var(--line);max-width:68ch}
+details{border-bottom:1px solid var(--line)}
+summary{
+  cursor:pointer;list-style:none;padding:16px 0;font-weight:600;font-size:15.5px;
+  display:flex;justify-content:space-between;gap:16px;align-items:center;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--brass);font-size:20px;line-height:1;flex:0 0 auto}
+details[open] summary::after{content:"–"}
+details p{padding-bottom:18px;color:var(--ink-2);font-size:15px;max-width:58ch}
+
+footer{border-top:1px solid var(--line);color:var(--ink-2);font-size:13px}
+footer .wrap{padding-block:28px;display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline}
+footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:15px}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition-duration:.001ms !important;animation-duration:.001ms !important}
+}
+</style>
+
+</head>
+<body>
+<div class="bar">
+  <div class="wrap bar-in">
+    <div class="mark"><b>próximaimobiliária</b><span>.com.br</span></div>
+    <div class="chip"><span class="lbl">Acaba em</span><span class="val num" id="barClock">24:00:00</span></div>
+    <div class="chip"><span class="lbl">Pacote</span><span class="val num" id="barPrice">R$ 9,99</span></div>
+  </div>
+</div>
+
+<main>
+
+  <section class="wrap" style="padding-block:clamp(36px,6vw,72px)">
+    <div class="hero">
+      <div class="hero-txt">
+        <div class="codigo">
+          <span class="tag">Código <b id="codigo">A7F2K9</b></span>
+          <span class="tag" id="nomeTag">Imobiliária Exemplo</span>
+          <span class="tag demo" id="demoFlag">Dados de exemplo</span>
+        </div>
+        <h1>Seja a próxima imobiliária a aparecer no Google em <em id="cidade">Sorocaba</em></h1>
+        <p class="lead">Lemos as páginas de imóvel do seu site e reescrevemos os títulos usando só o que já está em cada página. Os <b>100 primeiros estão prontos</b>, de graça, na planilha que você acabou de receber.</p>
+        <div class="stats">
+          <div class="stat"><span class="k">Páginas no site</span><span class="v num" id="sPaginas">3.070</span></div>
+          <div class="stat"><span class="k">Já analisadas</span><span class="v num" id="sAnalisadas">1.396</span></div>
+          <div class="stat gain"><span class="k">Ganho nos 100</span><span class="v num" id="sGanho">+412.800</span></div>
+        </div>
+        <p class="fine">Ganho é a soma das buscas/mês das palavras que passam a existir no título. Amostra lida em 29/10/2026.</p>
+      </div>
+
+      <aside class="tower-card">
+        <div class="tower-head">
+          <span class="eyebrow">Seu site em andares</span>
+          <span class="q num"><b id="andAtual">1</b> / <span id="andTotal">31</span></span>
+        </div>
+        <div class="tower-wrap">
+          <div class="tower" id="tower" role="img" aria-label="Prédio"></div>
+        </div>
+        <div class="tower-legend">
+          <span><i class="sw on"></i> Otimizado</span>
+          <span><i class="sw next"></i> No pacote</span>
+          <span><i class="sw off"></i> Parado</span>
+        </div>
+        <button class="btn-ghost" id="toggle" aria-pressed="false">Ver com os 1.000 títulos</button>
+        <p class="fine" style="font-size:12px">Cada andar são 100 páginas do seu site.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <span class="eyebrow">Os 100 que já são seus</span>
+      <h2 style="margin-top:10px">Título atual à esquerda, otimizado à direita</h2>
+      <p class="body" style="margin-top:12px">Abaixo de cada um, as palavras ativas: termos da lista de buscas do Google que aparecem exatos no título, com as buscas/mês de cada uma.</p>
+      <div class="pairs" id="pairs"></div>
+    </div>
+  </section>
+
+  <section class="band offer" id="oferta">
+    <div class="wrap">
+      <div class="offer-grid">
+        <div class="offer-txt">
+          <span class="eyebrow">Os outros 1.000</span>
+          <h2>Mais 1.000 títulos, no mesmo formato, por R$&nbsp;9,99</h2>
+          <p class="body">Mesmo método dos 100 que você já tem. Planilha pronta, uma linha por página, com a URL ao lado para colar direto na sua plataforma.</p>
+          <ul class="ticks">
+            <li>1.000 títulos reescritos, com as palavras ativas de cada um</li>
+            <li>URL de cada página na coluna ao lado</li>
+            <li>Entrega no WhatsApp, em minutos</li>
+            <li>Não gostou, devolve</li>
+          </ul>
+        </div>
+
+        <div class="price-card">
+          <div class="clock">
+            <span class="eyebrow" id="clockLabel">Este preço acaba em</span>
+            <span class="t num" id="bigClock">24:00:00</span>
+            <span class="u"><span>horas</span><span>min</span><span>seg</span></span>
+          </div>
+          <div class="price-row">
+            <span class="price-now num" id="bigPrice">R$ 9,99</span>
+            <span class="price-was" id="bigWas">depois das 24h, <s>R$ 298,00</s> &rarr; R$ 298,00</span>
+          </div>
+          <div class="passo" id="passoInicio">
+            <button class="cta" id="btnPagar" type="button">Pagar R$ 9,99 no Pix</button>
+            <p class="fine" id="ctaFine">O relógio começou quando você leu o QR code. Não reinicia.</p>
+          </div>
+
+          <form class="passo" id="passoEmail" hidden>
+            <div class="campo">
+              <label for="email">Seu e-mail</label>
+              <input id="email" name="email" type="email" inputmode="email"
+                     autocomplete="email" placeholder="voce@suaimobiliaria.com.br" required>
+            </div>
+            <button class="cta" id="btnGerar" type="submit">Gerar o Pix</button>
+            <p class="aviso" id="avisoEmail"></p>
+            <p class="fine">O link da planilha vai para esse e-mail e aparece aqui na tela.</p>
+          </form>
+
+          <div class="passo" id="passoPix" hidden>
+            <div class="pix-qr"><img id="pixImg" alt="QR code do Pix"></div>
+            <div class="campo">
+              <label>Pix copia e cola</label>
+              <div class="copia" id="pixCodigo"></div>
+            </div>
+            <button class="cta" id="btnCopiar" type="button">Copiar código</button>
+            <div class="esperando"><i class="pulso"></i><span id="pixEstado">Esperando o pagamento cair</span></div>
+            <p class="fine">Abre o app do banco, escolhe Pix e cola o código. A tela vira sozinha.</p>
+          </div>
+
+          <div class="pago" id="passoPago" hidden>
+            <span class="selo">Pagamento confirmado</span>
+            <h3>Os 1.000 títulos estão prontos</h3>
+            <a class="cta" id="linkPlanilha" href="#" target="_blank" rel="noopener">Abrir a planilha</a>
+            <p class="fine" id="finePago">Título e URL lado a lado. É só copiar e colar na sua plataforma.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step"><span class="n num">1</span><h3>Lemos o sitemap</h3><p>Pegamos as páginas de imóvel do seu site e os dados que já estão em cada uma: tipo, cidade, condomínio, quartos, metragem.</p></div>
+        <div class="step"><span class="n num">2</span><h3>Montamos o título</h3><p>Reordenamos esses mesmos dados na forma que o Google já recebe busca. Nada é inventado, nada muda no imóvel.</p></div>
+        <div class="step"><span class="n num">3</span><h3>Você cola na plataforma</h3><p>A planilha traz título e URL lado a lado. Cola no campo de título de cada página e acabou.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="guarantee">
+        <h2>Não gostou, devolve</h2>
+        <p class="body">Abriu a planilha, achou que não serve, responde no WhatsApp e o dinheiro volta. Sem formulário e sem pergunta. Compra pela internet também tem os 7 dias de arrependimento previstos no Código de Defesa do Consumidor.</p>
+      </div>
+
+      <div class="faq">
+        <details open><summary>Por que R$ 9,99 e não de graça?</summary><p>Os 100 primeiros são de graça para você conferir o método. Os 1.000 seguintes custam porque é processamento de verdade: ler o site inteiro, cruzar com a lista de buscas e montar linha por linha.</p></details>
+        <details><summary>O que acontece quando o relógio zera?</summary><p>O pacote de 1.000 passa a custar R$ 298,00. O relógio começou na primeira vez que esta página abriu e não reinicia se você fechar ou abrir em outro aparelho.</p></details>
+        <details><summary>Vou precisar trocar de plataforma?</summary><p>Não. O título é um campo de texto na página do imóvel. Funciona em qualquer plataforma, inclusive nas que geram o título sozinhas.</p></details>
+        <details><summary>E as páginas que sobram?</summary><p>Depois dos 1.000 ainda restam páginas no seu site. Quando quiser fechar o restante, a gente combina no WhatsApp.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>próximaimobiliária.com.br</b>
+    <span>Loja das Palavras</span>
+    <span>WhatsApp (15) 99999-0000</span>
+    <span style="margin-left:auto" id="footCode">Código A7F2K9</span>
+  </div>
+</footer>
+
+<script>
+const DATA = __DADOS__;
+
+const br = n => n.toLocaleString("pt-BR");
+const $  = id => document.getElementById(id);
+
+/* ---- preenche o texto ---- */
+$("codigo").textContent    = DATA.codigo;
+$("footCode").textContent  = "Código " + DATA.codigo;
+$("nomeTag").textContent   = DATA.imobiliaria;
+$("cidade").textContent    = DATA.cidade;
+$("sPaginas").textContent  = br(DATA.paginas);
+$("sAnalisadas").textContent = br(DATA.analisadas);
+$("sGanho").textContent    = "+" + br(DATA.ganho);
+$("bigWas").innerHTML      = "depois das 24h, R$&nbsp;" + DATA.precoDepois;
+if(!DATA.demo) $("demoFlag").hidden = true;
+
+/* ---- prédio: 1 andar = 100 páginas ---- */
+const POR_ANDAR = 100;
+const andares   = Math.ceil(DATA.paginas / POR_ANDAR);
+const acesos    = Math.max(1, Math.round(DATA.gratis / POR_ANDAR));
+const noPacote  = Math.round(DATA.pacote / POR_ANDAR);
+const tower     = $("tower");
+
+$("andTotal").textContent = andares;
+$("andAtual").textContent = acesos;
+
+for(let i=0;i<andares;i++){
+  const f = document.createElement("div");
+  f.className = "floor";
+  f.style.transitionDelay = (i*14) + "ms";
+  for(let j=0;j<6;j++) f.appendChild(document.createElement("i"));
+  tower.appendChild(f);
+}
+// column-reverse desenha de baixo pra cima, então o telhado entra por último
+const telhado = document.createElement("div");
+telhado.className = "roof";
+tower.appendChild(telhado);
+
+const floors = [...tower.querySelectorAll(".floor")];
+function pinta(previa){
+  const alvo = previa ? acesos + noPacote : acesos;
+  floors.forEach((f,i)=>{
+    f.classList.toggle("on",   i < acesos);
+    f.classList.toggle("next", i >= acesos && i < alvo);
+  });
+  $("andAtual").textContent = alvo;
+  tower.setAttribute("aria-label",
+    "Prédio com " + andares + " andares, " + alvo + " acesos");
+}
+pinta(false);
+
+const toggle = $("toggle");
+toggle.addEventListener("click", ()=>{
+  const on = toggle.getAttribute("aria-pressed") === "true";
+  toggle.setAttribute("aria-pressed", String(!on));
+  toggle.textContent = on ? "Ver com os 1.000 títulos" : "Voltar para o que já é seu";
+  pinta(!on);
+});
+
+/* ---- títulos antes/depois ---- */
+function kwBlock(list){
+  if(!list.length) return '<div class="none">nenhuma palavra ativa</div>';
+  const total = list.reduce((s,[,v])=>s+v,0);
+  return list.map(([k,v])=>`<div><span>${k}</span><b>${br(v)}</b></div>`).join("")
+       + `<div class="tot"><span>Total</span><b>${br(total)}/mês</b></div>`;
+}
+$("pairs").innerHTML = DATA.exemplos.map(e => `
+  <article class="pair">
+    <div class="side before">
+      <span class="eyebrow">Atual</span>
+      <p class="tt">${e.antes}</p>
+      <div class="kw">${kwBlock(e.antesKw)}</div>
+    </div>
+    <div class="side after">
+      <span class="eyebrow">Otimizado</span>
+      <p class="tt">${e.depois}</p>
+      <div class="kw">${kwBlock(e.depoisKw)}</div>
+    </div>
+  </article>`).join("");
+
+/* ---- relógio ---- */
+const fim = DATA.deadline ? new Date(DATA.deadline).getTime()
+                          : Date.now() + 24*60*60*1000;
+
+const btnPagar = $("btnPagar");
+btnPagar.textContent = "Pagar R$ " + DATA.precoAgora + " no Pix";
+$("barPrice").textContent = "R$ " + DATA.precoAgora;
+$("bigPrice").textContent = "R$ " + DATA.precoAgora;
+
+let expirado = false;
+function expira(){
+  if(expirado) return;
+  expirado = true;
+  document.body.classList.add("expirado");
+  $("barPrice").textContent  = "R$ " + DATA.precoDepois;
+  $("bigPrice").textContent  = "R$ " + DATA.precoDepois;
+  $("bigWas").textContent    = "o preço de R$ " + DATA.precoAgora + " era válido por 24h";
+  $("clockLabel").textContent = "Prazo encerrado";
+  btnPagar.textContent = "Pagar R$ " + DATA.precoDepois + " no Pix";
+  $("ctaFine").textContent = "O preço de lançamento acabou. O pacote continua disponível pelo valor cheio.";
+}
+function tick(){
+  const ms = fim - Date.now();
+  if(ms <= 0){ $("barClock").textContent = $("bigClock").textContent = "00:00:00"; expira(); return; }
+  const h = Math.floor(ms/3600000),
+        m = Math.floor(ms%3600000/60000),
+        s = Math.floor(ms%60000/1000);
+  const p = n => String(n).padStart(2,"0");
+  const txt = p(h)+":"+p(m)+":"+p(s);
+  $("barClock").textContent = txt;
+  $("bigClock").textContent = txt;
+}
+tick();
+setInterval(tick,1000);
+
+/* ---- fluxo do pagamento ---- */
+const passos = ["passoInicio","passoEmail","passoPix","passoPago"];
+const mostrar = id => passos.forEach(p => { $(p).hidden = (p !== id); });
+
+btnPagar.addEventListener("click", () => {
+  mostrar("passoEmail");
+  $("email").focus();
+});
+
+$("passoEmail").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const email = $("email").value.trim();
+  const btn = $("btnGerar"), aviso = $("avisoEmail");
+  aviso.textContent = "";
+  btn.disabled = true;
+  btn.textContent = "Gerando…";
+  try {
+    const r = await fetch("/api/pix", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ codigo: DATA.codigo, email })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.erro || "Não consegui gerar o Pix.");
+    if (d.status === "pago") return concluir(d.planilha);
+
+    $("pixCodigo").textContent = d.copiaECola || "";
+    if (d.qrBase64) $("pixImg").src = "data:image/png;base64," + d.qrBase64;
+    else $("pixImg").closest(".pix-qr").hidden = true;
+    mostrar("passoPix");
+    vigiar();
+  } catch (e) {
+    aviso.textContent = e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Gerar o Pix";
+  }
+});
+
+$("btnCopiar").addEventListener("click", async () => {
+  const btn = $("btnCopiar"), txt = $("pixCodigo").textContent;
+  try {
+    await navigator.clipboard.writeText(txt);
+    btn.textContent = "Copiado";
+  } catch {
+    const sel = window.getSelection(), faixa = document.createRange();
+    faixa.selectNodeContents($("pixCodigo"));
+    sel.removeAllRanges(); sel.addRange(faixa);
+    btn.textContent = "Selecionado, use Cmd+C";
+  }
+  setTimeout(() => { btn.textContent = "Copiar código"; }, 2600);
+});
+
+function concluir(planilha) {
+  const link = $("linkPlanilha");
+  if (planilha) {
+    link.href = planilha;
+  } else {
+    link.hidden = true;
+    $("finePago").textContent =
+      "A planilha está sendo montada. O link chega no seu e-mail em alguns minutos.";
+  }
+  mostrar("passoPago");
+}
+
+/* Pergunta de tempos em tempos se o Pix caiu. Começa rápido e vai
+   espaçando, pra não martelar o servidor em quem deixou a aba aberta. */
+function vigiar() {
+  let espera = 3000;
+  const bater = async () => {
+    try {
+      const r = await fetch("/api/status?codigo=" + encodeURIComponent(DATA.codigo),
+                            { cache: "no-store" });
+      const d = await r.json();
+      if (d.status === "pago") return concluir(d.planilha);
+    } catch {}
+    espera = Math.min(espera * 1.25, 15000);
+    setTimeout(bater, espera);
+  };
+  setTimeout(bater, espera);
+}
+
+/* Reabriu a página depois de pagar: já mostra a planilha. */
+if (DATA.jaPago) concluir(DATA.planilha || "");
+</script>
+
+</body>
+</html>
