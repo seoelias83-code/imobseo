@@ -132,6 +132,10 @@ h1{
 }
 h1 em{font-style:normal;color:var(--brass)}
 .lead{color:var(--ink-2);font-size:clamp(16px,1.7vw,18px);max-width:54ch}
+.dom{
+  font-size:14px;font-weight:600;color:var(--brass);
+  letter-spacing:.01em;overflow-wrap:anywhere;margin-top:-6px;
+}
 
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r)}
 .stat{background:var(--surface);padding:14px 16px;min-width:0}
@@ -351,13 +355,14 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
           <span class="tag demo" id="demoFlag">Dados de exemplo</span>
         </div>
         <h1>Seja a próxima imobiliária a aparecer no Google em <em id="cidade">Sorocaba</em></h1>
-        <p class="lead">Os títulos do site da <b id="nomeLead">sua imobiliária</b>, reescritos com os dados que já estão em cada página. <b id="leadQtd">100 deles</b> estão aqui embaixo, prontos pra copiar. São seus, sem cadastro.</p>
+        <p class="dom" id="dominio">suaimobiliaria.com.br</p>
+        <p class="lead">Os títulos do site da <b id="nomeLead">sua imobiliária</b>, reescritos com os dados que já estão em cada página. <span id="leadQtd">100 deles estão</span> aqui embaixo, prontos pra copiar. São seus, sem cadastro.</p>
         <div class="stats">
           <div class="stat"><span class="k">Páginas no site</span><span class="v num" id="sPaginas">3.070</span></div>
           <div class="stat"><span class="k">Já analisadas</span><span class="v num" id="sAnalisadas">1.396</span></div>
-          <div class="stat gain"><span class="k">Ganho nos 100</span><span class="v num" id="sGanho">+412.800</span></div>
+          <div class="stat gain"><span class="k">Alcance de busca</span><span class="v num" id="sGanho">—</span></div>
         </div>
-        <p class="fine">Ganho é a soma das buscas/mês das palavras que passam a existir no título. Amostra lida em 29/10/2026.</p>
+        <p class="fine">Alcance de busca compara o quanto as palavras dos títulos novos somam de buscas/mês contra as de hoje. É estimativa de alcance, não previsão de visitas: o volume é nacional.</p>
       </div>
 
       <aside class="tower-card">
@@ -503,10 +508,23 @@ $("codigo").textContent    = DATA.codigo;
 $("footCode").textContent  = "Código " + DATA.codigo;
 $("nomeTag").textContent   = DATA.imobiliaria;
 $("nomeLead").textContent  = DATA.imobiliaria || "sua imobiliária";
-$("cidade").textContent    = DATA.cidade;
+if (DATA.cidade) {
+  $("cidade").textContent = DATA.cidade;
+} else {
+  // sem cidade o título fecharia com um "em" solto
+  const em = $("cidade");
+  em.previousSibling.textContent = "Seja a próxima imobiliária a aparecer no Google";
+  em.remove();
+}
+$("dominio").textContent = DATA.dominio || DATA.imobiliaria || "";
+$("dominio").hidden = !$("dominio").textContent;
 $("sPaginas").textContent  = br(DATA.paginas);
 $("sAnalisadas").textContent = br(DATA.analisadas);
-$("sGanho").textContent    = "+" + br(DATA.ganho);
+// A soma de buscas dava dezenas de milhões e não convence ninguém: o volume de
+// "casa à venda" é nacional, não é tráfego do site. A proporção usa os mesmos
+// dois números e tira a escala falsa de cena.
+const somaKw = (lista, campo) =>
+  lista.reduce((t, e) => t + (e[campo] || []).reduce((s, [, v]) => s + (v || 0), 0), 0);
 $("bigWas").innerHTML      = "depois das 24h, R$&nbsp;" + DATA.precoDepois;
 if(!DATA.demo) $("demoFlag").hidden = true;
 
@@ -565,7 +583,17 @@ const ABERTOS = 6;   // quantos aparecem antes de clicar em "Ver os 90"
 
 const plural = brinde.length === 1 ? " título" : " títulos";
 $("brindeEyebrow").textContent = "Seu presente · " + brinde.length + plural;
-$("leadQtd").textContent = brinde.length + plural;
+
+// alcance: o quanto as palavras novas somam a mais que as de hoje
+const antesTot = somaKw(brinde, "antesKw");
+const depoisTot = somaKw(brinde, "depoisKw");
+$("sGanho").textContent = antesTot > 0
+  ? (depoisTot / antesTot >= 10
+      ? Math.round(depoisTot / antesTot) + "\u00d7"
+      : (depoisTot / antesTot).toFixed(1).replace(".", ",") + "\u00d7")
+  : (depoisTot > 0 ? "novo" : "\u2014");
+$("leadQtd").innerHTML = "<b>" + brinde.length + plural + "</b> " +
+  (brinde.length === 1 ? "está" : "estão");
 
 function cartao(e, i) {
   return `

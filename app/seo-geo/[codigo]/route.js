@@ -66,6 +66,7 @@ export async function GET(_req, { params }) {
     jaPago: pedido?.status === "pago",
     planilha: pedido?.planilha || "",
     whatsapp: oferta.whatsapp || process.env.WHATSAPP || "",
+    dominio: oferta.dominio || "",
   };
 
   const molde = await readFile(
