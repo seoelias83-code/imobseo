@@ -7,7 +7,8 @@
  * O codigo sai do dominio, sempre o mesmo: gerar o PDF de novo aponta pra
  * mesma pagina, entao o relogio de quem ja abriu nao reinicia.
  *
- * Protegido por PUBLICAR_KEY. Sem ela ninguem publica oferta no seu dominio.
+ * A senha vem embutida no app. PUBLICAR_KEY na Vercel vale tambem, pra voce
+ * poder trocar sem recompilar o app.
  */
 import { createHash } from "node:crypto";
 import { gravarOferta, lerOferta } from "@/lib/oferta";
@@ -15,7 +16,10 @@ import { gravarOferta, lerOferta } from "@/lib/oferta";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const CHAVE = process.env.PUBLICAR_KEY || "";
+// A mesma que esta no codigo do app H1 do Sitemap. Se um dia precisar trocar,
+// troque nos dois lugares — ou ponha a nova em PUBLICAR_KEY, que vale junto.
+const EMBUTIDA = "h1sitemap-publica-K7qx2026";
+const CHAVES = [process.env.PUBLICAR_KEY, EMBUTIDA].filter(Boolean);
 
 // sem vogais: nao forma palavra sem querer, e nao tem 0/O nem 1/I pra confundir
 const ALFABETO = "23456789BCDFGHJKLMNPQRSTVWXZ";
@@ -39,9 +43,6 @@ function palavras(v) {
 }
 
 export async function POST(req) {
-  if (!CHAVE)
-    return Response.json({ erro: "PUBLICAR_KEY nao configurada no servidor" }, { status: 503 });
-
   let d;
   try {
     d = await req.json();
@@ -49,7 +50,7 @@ export async function POST(req) {
     return Response.json({ erro: "corpo invalido" }, { status: 400 });
   }
 
-  if (texto(d.chave) !== CHAVE)
+  if (!CHAVES.includes(texto(d.chave)))
     return Response.json({ erro: "chave errada" }, { status: 401 });
 
   const dominio = texto(d.dominio).replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0];
