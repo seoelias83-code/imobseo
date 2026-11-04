@@ -26,6 +26,7 @@ body{margin:0;font-family:system-ui,sans-serif;overflow-x:hidden}img{max-width:1
   --brass-fill:#B4873F;
   --brass-soft:#EFE5D2;
   --alert:#8C3A2B;
+  --ok:#1F6F4A;
 
   --display:"Newsreader",Georgia,"Times New Roman",serif;
   --ui:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -44,6 +45,7 @@ body{margin:0;font-family:system-ui,sans-serif;overflow-x:hidden}img{max-width:1
     --brass-fill:#C79949;
     --brass-soft:#2A2317;
     --alert:#DA7A65;
+    --ok:#5FB98A;
     color-scheme:dark;
   }
 }
@@ -57,6 +59,7 @@ body{margin:0;font-family:system-ui,sans-serif;overflow-x:hidden}img{max-width:1
   --brass-fill:#C79949;
   --brass-soft:#2A2317;
   --alert:#DA7A65;
+  --ok:#5FB98A;
   color-scheme:dark;
 }
 
@@ -103,9 +106,11 @@ a{color:inherit}
   display:flex;align-items:center;gap:16px;flex-wrap:wrap;
   padding-block:10px;
 }
-.mark{font-family:var(--display);font-size:16px;letter-spacing:.01em;margin-right:auto}
+.mark{font-family:var(--display);font-size:16px;letter-spacing:.01em;margin-right:auto;
+  display:flex;flex-direction:column;line-height:1.2}
 .mark b{font-weight:500}
-.mark span{color:var(--ink-2)}
+.mark span{color:var(--ink-2);font-family:var(--ui);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:600}
 .chip{
   display:inline-flex;align-items:baseline;gap:8px;
   border:1px solid var(--line);border-radius:999px;
@@ -218,7 +223,7 @@ h1 em{font-style:normal;color:var(--brass)}
 .copiar[data-ok="1"]{border-color:var(--brass);color:var(--brass)}
 .mais-wrap{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
 .mais-wrap .btn-sec{width:auto;padding-inline:26px}
-.side.after .kw .tot b{color:var(--brass)}
+.side.after .kw .tot b{color:var(--ok)}
 
 /* ---------- oferta ---------- */
 .offer{background:var(--surface)}
@@ -309,13 +314,17 @@ h2{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,38px);l
   font-family:var(--display);font-weight:400;font-size:clamp(20px,3vw,26px);
   line-height:1.2;margin:0 0 14px;max-width:24ch;
 }
+.ajuda{color:var(--ink-2);font-size:clamp(15px,1.6vw,17px);max-width:46ch;margin:0 0 4px}
+.kw .tot.auto b{color:var(--alert)}
+.kw .tot.otim b{color:var(--ok)}
 .ticks{display:flex;flex-direction:column;gap:9px;margin:0;padding:0;list-style:none}
 .ticks li{display:flex;gap:11px;align-items:flex-start;font-size:15px}
 .ticks li::before{content:"";flex:0 0 auto;width:7px;height:7px;margin-top:8px;background:var(--brass-fill);border-radius:1px}
 
 /* ---------- passos ---------- */
 .steps{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);margin-top:28px}
-@media(min-width:760px){ .steps{grid-template-columns:repeat(3,1fr)} }
+@media(min-width:620px){ .steps{grid-template-columns:repeat(2,1fr)} }
+@media(min-width:900px){ .steps{grid-template-columns:repeat(4,1fr)} }
 .step{background:var(--paper);padding:20px;display:flex;flex-direction:column;gap:9px;min-width:0}
 .step .n{font-family:var(--display);font-size:26px;color:var(--brass);line-height:1;font-variant-numeric:tabular-nums}
 .step h3{font-size:15px;font-weight:600}
@@ -354,7 +363,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 <body>
 <div class="bar">
   <div class="wrap bar-in">
-    <div class="mark"><b>próximaimobiliária</b><span>.com.br</span></div>
+    <div class="mark"><span>Relatório gerado por</span><b>Loja das Palavras</b></div>
     <div class="chip"><span class="val" id="barGratis">100 otimizações grátis</span></div>
     <div class="chip"><span class="lbl">Acaba em</span><span class="val num" id="barClock">24:00:00</span></div>
   </div>
@@ -372,6 +381,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
         </div>
         <h1>Seja a próxima imobiliária a aparecer no Google em <em id="cidade">Sorocaba</em></h1>
         <p class="dom" id="dominio">suaimobiliaria.com.br</p>
+        <p class="ajuda" id="ajuda">Ajudamos você a colocar a sua imobiliária no topo do Google.</p>
         <p class="lead" id="lead">Otimizamos <b>100 títulos</b> da <b>sua imobiliária</b> e, ajustando as palavras, é possível dobrar ou até triplicar os cliques do seu site, gerando tráfego sem custo pelo Google e também nos portais Zap Imóveis, Viva Real, Chaves na Mão, Imóvel Web, OLX e tantos outros parceiros Kenlo.</p>
         <div class="stats">
           <div class="stat"><span class="k">Páginas no site</span><span class="v num" id="sPaginas">3.070</span></div>
@@ -391,10 +401,8 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
         </div>
         <div class="tower-legend">
           <span><i class="sw on"></i> Gratuitos</span>
-          <span><i class="sw next"></i> Otimizados</span>
-          <span><i class="sw off"></i> Não otimizados</span>
+          <span><i class="sw off"></i> Todos do site</span>
         </div>
-        <button class="btn-ghost" id="toggle" aria-pressed="false">Ver com os 1.000 títulos</button>
         <p class="fine" style="font-size:12px">Cada andar são 100 páginas do seu site.</p>
       </aside>
     </div>
@@ -420,8 +428,8 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
     <div class="wrap">
       <div class="offer-grid">
         <div class="offer-txt">
-          <span class="eyebrow">Os outros 1.000</span>
-          <h2 id="ofertaTit">Mais 1.000 títulos, no mesmo formato</h2>
+          <span class="eyebrow" id="ofertaEyebrow">Aproveite!</span>
+          <h2 id="ofertaTit">Libere mais 900 títulos</h2>
           <p class="body" id="ofertaTxt">Disponibilizamos os primeiros grátis para que você valide a estratégia. Caso faça sentido para a sua imobiliária, oferecemos mais 1.000 títulos por apenas R$&nbsp;9,99. Aproveite que a oferta é por tempo limitado.</p>
         </div>
 
@@ -477,25 +485,23 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
       </div>
 
       <div class="steps">
-        <div class="step"><span class="n num">1</span><h3>Lemos o sitemap</h3><p>Pegamos as páginas de imóvel do seu site e os dados que já estão em cada uma: tipo, cidade, condomínio, quartos, metragem.</p></div>
-        <div class="step"><span class="n num">2</span><h3>Montamos o título</h3><p>Reordenamos esses mesmos dados na forma que o Google já recebe busca. Nada é inventado, nada muda no imóvel.</p></div>
-        <div class="step"><span class="n num">3</span><h3>Você cola na plataforma</h3><p>A planilha traz título e URL lado a lado. Cola no campo de título de cada página e acabou.</p></div>
+        <div class="step"><span class="n num">1</span><h3>Lemos seu site</h3></div>
+        <div class="step"><span class="n num">2</span><h3>Reorganizamos as palavras</h3></div>
+        <div class="step"><span class="n num">3</span><h3>Disponibilizamos para copiar e colar</h3></div>
+        <div class="step"><span class="n num">4</span><h3>Se preferir, atualizamos para você</h3></div>
       </div>
     </div>
   </section>
 
   <section class="band">
     <div class="wrap">
-      <div class="guarantee">
-        <h2>Não gostou, devolve</h2>
-        <p class="body">Abriu a planilha, achou que não serve, responde no WhatsApp e o dinheiro volta. Sem formulário e sem pergunta. Compra pela internet também tem os 7 dias de arrependimento previstos no Código de Defesa do Consumidor.</p>
-      </div>
+
 
       <div class="faq">
-        <details open><summary>Por que R$ 9,99 e não de graça?</summary><p>Os 100 primeiros são de graça para você conferir o método: 10 no PDF e 90 nesta página. Os 1.000 seguintes custam porque é processamento de verdade: ler o site inteiro, cruzar com a lista de buscas e montar linha por linha.</p></details>
-        <details><summary>O que acontece quando o relógio zera?</summary><p>O pacote de 1.000 passa a custar R$ 298,00. O relógio começou na primeira vez que esta página abriu e não reinicia se você fechar ou abrir em outro aparelho.</p></details>
+        <details open id="faqPreco"><summary>Por que R$ 19,80 e não de graça?</summary><p>Os 100 primeiros são de graça para você conferir o método. Os 900 seguintes custam porque é processamento de verdade: ler o site inteiro, cruzar com a lista de buscas e montar linha por linha.</p></details>
+        <details id="faqRelogio"><summary>O que acontece quando o relógio zera?</summary><p>O pacote passa a custar R$ 298,00. O relógio começou na primeira vez que esta página abriu e não reinicia se você fechar ou abrir em outro aparelho.</p></details>
         <details><summary>Vou precisar trocar de plataforma?</summary><p>Não. O título é um campo de texto na página do imóvel. Funciona em qualquer plataforma, inclusive nas que geram o título sozinhas.</p></details>
-        <details><summary>E as páginas que sobram?</summary><p>Depois dos 1.000 ainda restam páginas no seu site. Quando quiser fechar o restante, a gente combina no WhatsApp.</p></details>
+        <details><summary>E as páginas que sobram?</summary><p>Ainda restam páginas no seu site depois deste pacote. Quando quiser fechar o restante, a gente combina no WhatsApp.</p></details>
       </div>
     </div>
   </section>
@@ -503,9 +509,8 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 
 <footer>
   <div class="wrap">
-    <b>próximaimobiliária.com.br</b>
-    <span>Loja das Palavras</span>
-    <span>WhatsApp (15) 99999-0000</span>
+    <b>Relatório gerado por Loja das Palavras</b>
+    <span id="footZap">WhatsApp (15) 99999-0000</span>
     <span style="margin-left:auto" id="footCode">Código A7F2K9</span>
   </div>
 </footer>
@@ -564,33 +569,19 @@ telhado.className = "roof";
 tower.appendChild(telhado);
 
 const floors = [...tower.querySelectorAll(".floor")];
-function pinta(previa){
-  const alvo = previa ? acesos + noPacote : acesos;
-  floors.forEach((f,i)=>{
-    f.classList.toggle("on",   i < acesos);
-    f.classList.toggle("next", i >= acesos && i < alvo);
-  });
-  $("andAtual").textContent = alvo;
-  tower.setAttribute("aria-label",
-    "Prédio com " + andares + " andares, " + alvo + " acesos");
-}
-pinta(false);
-
-const toggle = $("toggle");
-toggle.addEventListener("click", ()=>{
-  const on = toggle.getAttribute("aria-pressed") === "true";
-  toggle.setAttribute("aria-pressed", String(!on));
-  toggle.textContent = on ? "Ver com os 1.000 títulos" : "Voltar para o que já é seu";
-  pinta(!on);
-});
+floors.forEach((f, i) => f.classList.toggle("on", i < acesos));
+$("andAtual").textContent = acesos;
+tower.setAttribute("aria-label",
+  "Prédio com " + andares + " andares, " + acesos + " acesos");
 
 /* ---- títulos antes/depois ---- */
-function kwBlock(list){
+function kwBlock(list, lado){
   if(!list.length) return '<div class="none">nenhuma palavra ativa</div>';
   const total = list.reduce((s,[,v])=>s+v,0);
   return `<div class="kw-h">Buscas/mês</div>`
        + list.map(([k,v])=>`<div><span>${k}</span><b>${br(v)}</b></div>`).join("")
-       + `<div class="tot"><span>Total</span><b>${br(total)}</b></div>`;
+       + `<div class="tot ${lado}"><span>${lado === "auto" ? "Automático" : "Otimizado"}</span>`
+       + `<b>${br(total)}</b></div>`;
 }
 const brinde = DATA.brinde || DATA.exemplos || [];
 const ABERTOS = 6;   // quantos aparecem antes de clicar em "Ver os 90"
@@ -618,12 +609,35 @@ $("barGratis").textContent = brinde.length + " otimizações grátis";
 $("baixaTit").textContent =
   "Baixe " + (brinde.length === 1 ? "a primeira otimização" :
               "as " + brinde.length + " primeiras otimizações") + " gratuitamente";
-$("ofertaTit").textContent = "Mais " + br(DATA.pacote || 1000) + " títulos, no mesmo formato";
+// o pacote conta a partir do que ja foi de graca: 1.000 contratados = 900 a liberar
+const aLiberar = Math.max(1, (DATA.pacote || 1000) - brinde.length);
+$("ofertaTit").innerHTML =
+  "Libere mais " + br(aLiberar) + " títulos por apenas R$&nbsp;" + DATA.precoAgora;
 $("ofertaTxt").innerHTML =
   "Disponibilizamos os primeiros grátis para que você valide a estratégia. " +
   "Caso faça sentido para a <b>" + esc(nomeCliente) + "</b>, oferecemos mais " +
-  br(DATA.pacote || 1000) + " títulos por apenas <b>R$&nbsp;" + DATA.precoAgora +
+  br(aLiberar) + " títulos por apenas <b>R$&nbsp;" + DATA.precoAgora +
   "</b>. Aproveite que a oferta é por tempo limitado.";
+$("ajuda").textContent =
+  "Ajudamos você a colocar a " + nomeCliente + " no topo do Google" +
+  (DATA.cidade ? " em " + DATA.cidade : "") + ".";
+if (DATA.whatsapp) {
+  const z = String(DATA.whatsapp).replace(/\D/g, "").replace(/^55/, "");
+  $("footZap").textContent = z.length >= 10
+    ? "WhatsApp (" + z.slice(0, 2) + ") " + z.slice(2, -4) + "-" + z.slice(-4)
+    : "WhatsApp " + DATA.whatsapp;
+} else {
+  $("footZap").hidden = true;
+}
+$("faqPreco").querySelector("summary").textContent =
+  "Por que R$ " + DATA.precoAgora + " e não de graça?";
+$("faqPreco").querySelector("p").textContent =
+  "Os " + brinde.length + " primeiros são de graça para você conferir o método. Os " +
+  br(aLiberar) + " seguintes custam porque é processamento de verdade: ler o site " +
+  "inteiro, cruzar com a lista de buscas e montar linha por linha.";
+$("faqRelogio").querySelector("p").textContent =
+  "O pacote passa a custar R$ " + DATA.precoDepois + ". O relógio começou na primeira " +
+  "vez que esta página abriu e não reinicia se você fechar ou abrir em outro aparelho.";
 
 /* O caminho da página, sem o domínio, que se repete em todas e só ocupa espaço.
    O link inteiro fica no href, pra abrir a página de verdade. */
@@ -645,12 +659,12 @@ function cartao(e, i) {
       ${pagina(e.url)}
       <div class="lin"><span class="n num">${String(i + 1).padStart(2, "0")}</span>
         <p class="tt">${e.antes || "—"}</p></div>
-      <div class="kw">${kwBlock(e.antesKw)}</div>
+      <div class="kw">${kwBlock(e.antesKw, "auto")}</div>
     </div>
     <div class="side after">
       <span class="eyebrow">Otimizado</span>
       <p class="tt">${e.depois}</p>
-      <div class="kw">${kwBlock(e.depoisKw)}</div>
+      <div class="kw">${kwBlock(e.depoisKw, "otim")}</div>
       <button class="copiar" type="button" data-i="${i}">Copiar título</button>
     </div>
   </article>`;
@@ -710,10 +724,12 @@ function expira(){
   $("bigPrice").textContent  = "R$ " + DATA.precoDepois;
   $("bigWas").textContent    = "o preço de R$ " + DATA.precoAgora + " era válido por 24h";
   $("clockLabel").textContent = "Prazo encerrado";
+  $("ofertaTit").innerHTML = "Libere mais " + br(aLiberar) + " títulos por R$&nbsp;" + DATA.precoDepois;
+  $("ofertaEyebrow").textContent = "Pacote completo";
   $("ofertaTxt").innerHTML =
     "Disponibilizamos os primeiros grátis para que você valide a estratégia. " +
     "Caso faça sentido para a <b>" + esc(nomeCliente) + "</b>, são mais " +
-    br(DATA.pacote || 1000) + " títulos por <b>R$&nbsp;" + DATA.precoDepois + "</b>.";
+    br(aLiberar) + " títulos por <b>R$&nbsp;" + DATA.precoDepois + "</b>.";
   btnPagar.textContent = "Pagar R$ " + DATA.precoDepois + " no Pix";
   $("ctaFine").textContent = "O preço de lançamento acabou. O pacote continua disponível pelo valor cheio.";
 }
