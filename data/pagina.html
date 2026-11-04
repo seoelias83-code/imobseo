@@ -105,12 +105,16 @@ a{color:inherit}
   position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
   background:var(--surface);border-bottom:1px solid var(--line);
 }
-.bar-in{
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-  padding-block:10px;
+/* No celular o nome fica sozinho em cima e as duas etiquetas embaixo;
+   a partir de 700px tudo cabe numa linha só. */
+.bar-in{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding-block:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+@media(min-width:700px){
+  .bar-in{flex-direction:row;align-items:center;gap:16px}
+  .chips{margin-left:auto;gap:12px}
 }
-.mark{font-family:var(--display);font-size:16px;letter-spacing:.01em;margin-right:auto;
-  line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mark{font-family:var(--display);font-size:16px;letter-spacing:.01em;
+  line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mark b{font-weight:500}
 .chip{
   display:inline-flex;align-items:baseline;gap:8px;
@@ -326,8 +330,8 @@ h1 b{font-weight:inherit}
 h1,h1 b{overflow-wrap:anywhere}
 /* nome de cliente comprido (um domínio inteiro, por exemplo) quebrava no meio */
 h1.longo{font-size:clamp(25px,4vw,40px)}
-.assina{display:flex;align-items:center;gap:12px;margin:14px 0 0;color:var(--ink-2);font-size:13px}
-.assina .logo{width:54px;height:30px;flex:0 0 auto;background:#fff;border-radius:6px;padding:4px 6px;box-sizing:content-box}
+.assina{display:flex;align-items:center;gap:10px;margin:14px 0 0;color:var(--ink-2);font-size:13px}
+.assina .logo{width:40px;height:22px;flex:0 0 auto;background:#fff;border-radius:5px;padding:4px 5px;box-sizing:content-box}
 .assina b{color:var(--ink);font-weight:600}
 .kw .tot.auto b{color:var(--alert)}
 .kw .tot.otim b{color:var(--ok)}
@@ -378,8 +382,10 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 <div class="bar">
   <div class="wrap bar-in">
     <div class="mark"><b id="marcaNome">sua imobiliária</b></div>
-    <div class="chip"><span class="val" id="barGratis">100 otimizações grátis</span></div>
-    <div class="chip"><span class="lbl">Acaba em</span><span class="val num" id="barClock">24:00:00</span></div>
+    <div class="chips">
+      <div class="chip"><span class="val" id="barGratis">100 otimizações grátis</span></div>
+      <div class="chip"><span class="lbl">Acaba em</span><span class="val num" id="barClock">24:00:00</span></div>
+    </div>
   </div>
 </div>
 
