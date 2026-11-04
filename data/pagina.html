@@ -326,8 +326,8 @@ h1 b{font-weight:inherit}
 h1,h1 b{overflow-wrap:anywhere}
 /* nome de cliente comprido (um domínio inteiro, por exemplo) quebrava no meio */
 h1.longo{font-size:clamp(25px,4vw,40px)}
-.assina{display:flex;align-items:center;gap:8px;margin:2px 0 0;color:var(--ink-2);font-size:13px}
-.assina .logo{width:44px;height:24px;flex:0 0 auto}
+.assina{display:flex;align-items:center;gap:12px;margin:14px 0 0;color:var(--ink-2);font-size:13px}
+.assina .logo{width:54px;height:30px;flex:0 0 auto;overflow:visible}
 .assina b{color:var(--ink);font-weight:600}
 .kw .tot.auto b{color:var(--alert)}
 .kw .tot.otim b{color:var(--ok)}
@@ -390,11 +390,11 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
       <div class="hero-txt">
         <div class="codigo">
           <span class="tag">Código <b id="codigo">A7F2K9</b></span>
-          <span class="tag" id="nomeTag">Imobiliária Exemplo</span>
+
           <span class="tag demo" id="demoFlag">Dados de exemplo</span>
         </div>
         <h1 id="h1">Ajudamos você a colocar a <b id="h1nome">sua imobiliária</b> no topo do Google em <em id="cidade">Sorocaba</em></h1>
-        <p class="dom" id="dominio">suaimobiliaria.com.br</p>
+
         <p class="assina"><svg class="logo" viewBox="0 0 182 100" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><g stroke="var(--logo-h)" stroke-width="9"><path d="M21 39 L40 12 L45 5"/><path d="M134 56 L172 11 L168 4"/><path d="M63 62 H74"/></g><circle cx="31.5" cy="67" r="26.5" stroke="#C21734" stroke-width="10"/><circle cx="106" cy="67" r="26.5" stroke="#E7B42A" stroke-width="10"/></g></svg><span>Gerado por <b id="empresa">Loja das Palavras</b></span></p>
 
         <p class="lead" id="lead">Otimizamos <b>100 títulos</b> da <b>sua imobiliária</b> e, ajustando as palavras, é possível dobrar ou até triplicar os cliques do seu site, gerando tráfego sem custo pelo Google e também nos portais Zap Imóveis, Viva Real, Chaves na Mão, Imóvel Web, OLX e tantos outros parceiros Kenlo.</p>
@@ -516,8 +516,8 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
         <details><summary>Como surgiu a ideia?</summary><p>A ideia nasceu de um case real. Na época isso era feito manualmente, dava um trabalhão, mas trouxe ótimos resultados para o site. Hoje, com IA, conseguimos automatizar essa otimização — e este é um MVP para escalar a solução.</p></details>
         <details open id="faqPreco"><summary>Por que R$ 19,80 e não de graça?</summary><p>Os 100 primeiros são de graça para você conferir o método. Os 900 seguintes custam porque é processamento de verdade: ler o site inteiro, cruzar com a lista de buscas e montar linha por linha.</p></details>
         <details id="faqRelogio"><summary>O que acontece quando o relógio zera?</summary><p>O pacote passa a custar R$ 298,00. O relógio começou na primeira vez que esta página abriu e não reinicia se você fechar ou abrir em outro aparelho.</p></details>
-        <details><summary>Vou precisar trocar de plataforma?</summary><p>Não. O título é um campo de texto na página do imóvel. Funciona em qualquer plataforma, inclusive nas que geram o título sozinhas.</p></details>
-        <details><summary>E as páginas que sobram?</summary><p>Ainda restam páginas no seu site depois deste pacote. Quando quiser fechar o restante, a gente combina no WhatsApp.</p></details>
+        <details><summary>Vou precisar trocar de plataforma?</summary><p>Não. O título é um campo de texto na página do imóvel. Funciona em qualquer plataforma, inclusive nas que montam o título sozinhas.</p></details>
+        <details><summary>E as demais páginas?</summary><p>Quer otimizar o site inteiro e conhecer outras soluções para imobiliária? A gente combina no WhatsApp: dá para fechar o restante das páginas e tratar das outras frentes que trazem busca sem custo por clique.</p></details>
       </div>
     </div>
   </section>
@@ -542,7 +542,7 @@ const esc = t => String(t ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").repl
 /* ---- preenche o texto ---- */
 $("codigo").textContent    = DATA.codigo;
 $("footCode").textContent  = "Código " + DATA.codigo;
-$("nomeTag").textContent   = DATA.imobiliaria;
+
 if (DATA.cidade) {
   $("cidade").textContent = DATA.cidade;
 } else {
@@ -551,8 +551,7 @@ if (DATA.cidade) {
   em.previousSibling.textContent = " no topo do Google.";
   em.remove();
 }
-$("dominio").textContent = DATA.dominio || DATA.imobiliaria || "";
-$("dominio").hidden = !$("dominio").textContent;
+
 $("sPaginas").textContent  = br(DATA.paginas);
 $("sAnalisadas").textContent = br(DATA.analisadas);
 // A soma de buscas dava dezenas de milhões e não convence ninguém: o volume de
@@ -617,11 +616,10 @@ $("sGanho").textContent = antesTot > 0
 /* O texto de cima cita o numero real do brinde e o nome do cliente. */
 const nomeCliente = DATA.imobiliaria || "sua imobiliária";
 $("lead").innerHTML =
-  "Otimizamos <b>" + brinde.length + plural + "</b> da <b>" + esc(nomeCliente) +
-  "</b> e, ajustando as palavras, é possível dobrar ou até triplicar os cliques " +
-  "do seu site, gerando tráfego sem custo pelo Google e também nos portais " +
-  "Zap Imóveis, Viva Real, Chaves na Mão, Imóvel Web, OLX e tantos outros " +
-  "parceiros Kenlo.";
+  "Otimizamos <b>" + brinde.length + plural + "</b> do seu site. Ajustando as " +
+  "palavras é possível dobrar ou até triplicar os cliques, gerando tráfego sem " +
+  "custo pelo Google e também nos portais Zap Imóveis, Viva Real, Chaves na Mão, " +
+  "Imóvel Web, OLX e tantos outros parceiros Kenlo.";
 $("barGratis").textContent = brinde.length + " otimizações grátis";
 $("baixaTit").textContent =
   "Baixe " + (brinde.length === 1 ? "a primeira otimização" :
