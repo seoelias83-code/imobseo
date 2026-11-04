@@ -107,10 +107,8 @@ a{color:inherit}
   padding-block:10px;
 }
 .mark{font-family:var(--display);font-size:16px;letter-spacing:.01em;margin-right:auto;
-  display:flex;flex-direction:column;line-height:1.2}
+  line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mark b{font-weight:500}
-.mark span{color:var(--ink-2);font-family:var(--ui);font-size:10px;letter-spacing:.1em;
-  text-transform:uppercase;font-weight:600}
 .chip{
   display:inline-flex;align-items:baseline;gap:8px;
   border:1px solid var(--line);border-radius:999px;
@@ -213,7 +211,9 @@ h1 em{font-style:normal;color:var(--brass)}
   border-bottom:1px solid var(--line);align-self:flex-start;padding-bottom:1px;
 }
 .url:hover{color:var(--brass);border-color:var(--brass)}
-.lin .n{font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums;flex:0 0 auto;padding-top:3px}
+.lin{align-items:center;gap:8px}
+.lin .n{font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.lin .url{min-width:0}
 .copiar{
   font:inherit;font-size:12px;font-weight:600;cursor:pointer;align-self:flex-start;
   background:none;border:1px solid var(--line);border-radius:var(--r);
@@ -314,7 +314,7 @@ h2{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,38px);l
   font-family:var(--display);font-weight:400;font-size:clamp(20px,3vw,26px);
   line-height:1.2;margin:0 0 14px;max-width:24ch;
 }
-.ajuda{color:var(--ink-2);font-size:clamp(15px,1.6vw,17px);max-width:46ch;margin:0 0 4px}
+h1 b{font-weight:inherit}
 .kw .tot.auto b{color:var(--alert)}
 .kw .tot.otim b{color:var(--ok)}
 .ticks{display:flex;flex-direction:column;gap:9px;margin:0;padding:0;list-style:none}
@@ -363,7 +363,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 <body>
 <div class="bar">
   <div class="wrap bar-in">
-    <div class="mark"><span>Relatório gerado por</span><b>Loja das Palavras</b></div>
+    <div class="mark"><b id="marcaNome">sua imobiliária</b></div>
     <div class="chip"><span class="val" id="barGratis">100 otimizações grátis</span></div>
     <div class="chip"><span class="lbl">Acaba em</span><span class="val num" id="barClock">24:00:00</span></div>
   </div>
@@ -379,9 +379,9 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
           <span class="tag" id="nomeTag">Imobiliária Exemplo</span>
           <span class="tag demo" id="demoFlag">Dados de exemplo</span>
         </div>
-        <h1>Seja a próxima imobiliária a aparecer no Google em <em id="cidade">Sorocaba</em></h1>
+        <h1 id="h1">Ajudamos você a colocar a <b id="h1nome">sua imobiliária</b> no topo do Google em <em id="cidade">Sorocaba</em></h1>
         <p class="dom" id="dominio">suaimobiliaria.com.br</p>
-        <p class="ajuda" id="ajuda">Ajudamos você a colocar a sua imobiliária no topo do Google.</p>
+
         <p class="lead" id="lead">Otimizamos <b>100 títulos</b> da <b>sua imobiliária</b> e, ajustando as palavras, é possível dobrar ou até triplicar os cliques do seu site, gerando tráfego sem custo pelo Google e também nos portais Zap Imóveis, Viva Real, Chaves na Mão, Imóvel Web, OLX e tantos outros parceiros Kenlo.</p>
         <div class="stats">
           <div class="stat"><span class="k">Páginas no site</span><span class="v num" id="sPaginas">3.070</span></div>
@@ -510,6 +510,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 <footer>
   <div class="wrap">
     <b>Relatório gerado por Loja das Palavras</b>
+    <span id="footCons" hidden>Consultor: —</span>
     <span id="footZap">WhatsApp (15) 99999-0000</span>
     <span style="margin-left:auto" id="footCode">Código A7F2K9</span>
   </div>
@@ -531,7 +532,7 @@ if (DATA.cidade) {
 } else {
   // sem cidade o título fecharia com um "em" solto
   const em = $("cidade");
-  em.previousSibling.textContent = "Seja a próxima imobiliária a aparecer no Google";
+  em.previousSibling.textContent = " no topo do Google.";
   em.remove();
 }
 $("dominio").textContent = DATA.dominio || DATA.imobiliaria || "";
@@ -580,7 +581,7 @@ function kwBlock(list, lado){
   const total = list.reduce((s,[,v])=>s+v,0);
   return `<div class="kw-h">Buscas/mês</div>`
        + list.map(([k,v])=>`<div><span>${k}</span><b>${br(v)}</b></div>`).join("")
-       + `<div class="tot ${lado}"><span>${lado === "auto" ? "Automático" : "Otimizado"}</span>`
+       + `<div class="tot ${lado}"><span>${lado === "auto" ? "Título automático" : "Título otimizado"}</span>`
        + `<b>${br(total)}</b></div>`;
 }
 const brinde = DATA.brinde || DATA.exemplos || [];
@@ -618,17 +619,20 @@ $("ofertaTxt").innerHTML =
   "Caso faça sentido para a <b>" + esc(nomeCliente) + "</b>, oferecemos mais " +
   br(aLiberar) + " títulos por apenas <b>R$&nbsp;" + DATA.precoAgora +
   "</b>. Aproveite que a oferta é por tempo limitado.";
-$("ajuda").textContent =
-  "Ajudamos você a colocar a " + nomeCliente + " no topo do Google" +
-  (DATA.cidade ? " em " + DATA.cidade : "") + ".";
 if (DATA.whatsapp) {
   const z = String(DATA.whatsapp).replace(/\D/g, "").replace(/^55/, "");
-  $("footZap").textContent = z.length >= 10
-    ? "WhatsApp (" + z.slice(0, 2) + ") " + z.slice(2, -4) + "-" + z.slice(-4)
-    : "WhatsApp " + DATA.whatsapp;
+  $("footZap").textContent = "WhatsApp: " + (z.length >= 10
+    ? "(" + z.slice(0, 2) + ") " + z.slice(2, -4) + "-" + z.slice(-4)
+    : DATA.whatsapp);
 } else {
   $("footZap").hidden = true;
 }
+if (DATA.revendedor) {
+  $("footCons").textContent = "Consultor: " + DATA.revendedor;
+  $("footCons").hidden = false;
+}
+$("marcaNome").textContent = nomeCliente;
+$("h1nome").textContent = nomeCliente;
 $("faqPreco").querySelector("summary").textContent =
   "Por que R$ " + DATA.precoAgora + " e não de graça?";
 $("faqPreco").querySelector("p").textContent =
@@ -656,9 +660,9 @@ function cartao(e, i) {
   <article class="pair">
     <div class="side before">
       <span class="eyebrow">Atual</span>
-      ${pagina(e.url)}
       <div class="lin"><span class="n num">${String(i + 1).padStart(2, "0")}</span>
-        <p class="tt">${e.antes || "—"}</p></div>
+        ${pagina(e.url) || "<span></span>"}</div>
+      <p class="tt">${e.antes || "—"}</p>
       <div class="kw">${kwBlock(e.antesKw, "auto")}</div>
     </div>
     <div class="side after">
