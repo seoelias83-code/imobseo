@@ -67,6 +67,7 @@ export async function GET(_req, { params }) {
     planilha: pedido?.planilha || "",
     whatsapp: oferta.whatsapp || process.env.WHATSAPP || "",
     revendedor: oferta.revendedor || "",
+    empresa: oferta.empresa || "",
     dominio: oferta.dominio || "",
   };
 

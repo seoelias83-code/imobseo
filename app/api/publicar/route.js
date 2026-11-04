@@ -87,6 +87,7 @@ export async function POST(req) {
     pacote: numero(d.pacote) || antiga.pacote || 1000,
     whatsapp: texto(d.whatsapp) || antiga.whatsapp || "",
     revendedor: texto(d.revendedor) || antiga.revendedor || "",
+    empresa: texto(d.empresa) || antiga.empresa || "",
     titulos,
     publicadoEm: new Date().toISOString(),
   });

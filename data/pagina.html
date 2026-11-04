@@ -315,6 +315,12 @@ h2{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,38px);l
   line-height:1.2;margin:0 0 14px;max-width:24ch;
 }
 h1 b{font-weight:inherit}
+h1,h1 b{overflow-wrap:anywhere}
+/* nome de cliente comprido (um domínio inteiro, por exemplo) quebrava no meio */
+h1.longo{font-size:clamp(25px,4vw,40px)}
+.assina{display:flex;align-items:center;gap:8px;margin:2px 0 0;color:var(--ink-2);font-size:13px}
+.assina .logo{width:34px;height:19px;flex:0 0 auto}
+.assina b{color:var(--ink);font-weight:600}
 .kw .tot.auto b{color:var(--alert)}
 .kw .tot.otim b{color:var(--ok)}
 .ticks{display:flex;flex-direction:column;gap:9px;margin:0;padding:0;list-style:none}
@@ -381,6 +387,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
         </div>
         <h1 id="h1">Ajudamos você a colocar a <b id="h1nome">sua imobiliária</b> no topo do Google em <em id="cidade">Sorocaba</em></h1>
         <p class="dom" id="dominio">suaimobiliaria.com.br</p>
+        <p class="assina"><svg class="logo" viewBox="0 0 60 34" aria-hidden="true"><g fill="none" stroke-linecap="round"><path d="M19 11 L11 3 M41 11 L49 3" stroke="#383A39" stroke-width="4"/><path d="M26.5 17 h7" stroke="#383A39" stroke-width="3"/><circle cx="19" cy="17" r="8" stroke="#C21734" stroke-width="4.4"/><circle cx="41" cy="17" r="8" stroke="#E7B42A" stroke-width="4.4"/></g></svg><span>Gerado por <b id="empresa">Loja das Palavras</b></span></p>
 
         <p class="lead" id="lead">Otimizamos <b>100 títulos</b> da <b>sua imobiliária</b> e, ajustando as palavras, é possível dobrar ou até triplicar os cliques do seu site, gerando tráfego sem custo pelo Google e também nos portais Zap Imóveis, Viva Real, Chaves na Mão, Imóvel Web, OLX e tantos outros parceiros Kenlo.</p>
         <div class="stats">
@@ -633,6 +640,8 @@ if (DATA.revendedor) {
 }
 $("marcaNome").textContent = nomeCliente;
 $("h1nome").textContent = nomeCliente;
+if (nomeCliente.length > 16) $("h1").classList.add("longo");
+if (DATA.empresa) $("empresa").textContent = DATA.empresa;
 $("faqPreco").querySelector("summary").textContent =
   "Por que R$ " + DATA.precoAgora + " e não de graça?";
 $("faqPreco").querySelector("p").textContent =
