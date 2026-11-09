@@ -929,14 +929,40 @@ function concluir(planilha) {
   $("barClock").closest(".chip").hidden = true;
 
   const link = $("linkPlanilha");
+  const titulo = document.querySelector("#passoPago h3");
   if (planilha) {
     link.href = planilha;
+    link.hidden = false;
+    titulo.textContent = "Os 1.000 títulos estão prontos";
+    $("finePago").textContent = "Título e URL lado a lado. É só copiar e colar na sua plataforma.";
   } else {
     link.hidden = true;
+    titulo.textContent = "Os 1.000 títulos estão sendo montados";
     $("finePago").textContent =
-      "A planilha está sendo montada. O link chega no seu e-mail em alguns minutos.";
+      "A planilha está sendo montada. O link aparece aqui nesta página em alguns minutos.";
+    esperarPlanilha();
   }
   mostrar("passoPago");
+}
+
+/* Pagou durante a leitura do site: confere de tempos em tempos até a planilha sair. */
+let esperandoPlanilha = false;
+function esperarPlanilha() {
+  if (esperandoPlanilha) return;
+  esperandoPlanilha = true;
+  const bater = async () => {
+    try {
+      const r = await fetch("/api/status?codigo=" + encodeURIComponent(DATA.codigo),
+                            { cache: "no-store" });
+      const d = await r.json();
+      if (d.status === "pago" && d.planilha) {
+        esperandoPlanilha = false;
+        return concluir(d.planilha);
+      }
+    } catch {}
+    setTimeout(bater, 20000);
+  };
+  setTimeout(bater, 20000);
 }
 
 /* Pergunta de tempos em tempos se o Pix caiu. Começa rápido e vai

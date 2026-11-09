@@ -11,7 +11,7 @@
  * poder trocar sem recompilar o app.
  */
 import { createHash } from "node:crypto";
-import { gravarOferta, lerOferta } from "@/lib/oferta";
+import { gravarOferta, lerOferta, lerPedido, liberar } from "@/lib/oferta";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -71,6 +71,10 @@ export async function POST(req) {
 
   const codigo = texto(d.codigo).toUpperCase() || codigoDe(dominio);
 
+  // false: leitura curta, os 900 do pacote ainda vão ser lidos. Sem o campo
+  // (app antigo, PDF feito na mão) vale como completa.
+  const completo = d.completo !== false;
+
   // Republicar o mesmo dominio atualiza os titulos e preserva o que ja foi
   // combinado antes (quantidade do brinde, nome digitado na mao).
   const antiga = (await lerOferta(codigo)) || {};
@@ -89,11 +93,22 @@ export async function POST(req) {
     revendedor: texto(d.revendedor) || antiga.revendedor || "",
     empresa: texto(d.empresa) || antiga.empresa || "",
     titulos,
+    completo,
     publicadoEm: new Date().toISOString(),
   });
 
+  // Quem pagou durante a leitura curta recebe a planilha agora, com todos os títulos.
+  let entregue = false;
+  if (completo) {
+    const pedido = await lerPedido(codigo);
+    if (pedido?.status === "pago" && !pedido.planilha) {
+      const novo = await liberar(codigo);
+      entregue = Boolean(novo.planilha);
+    }
+  }
+
   const base = (process.env.BASE_URL || `https://${req.headers.get("host")}`).replace(/\/$/, "");
-  return Response.json({ ok: true, codigo, url: `${base}/seo-geo/${codigo}`, titulos: titulos.length });
+  return Response.json({ ok: true, codigo, url: `${base}/seo-geo/${codigo}`, titulos: titulos.length, completo, entregue });
 }
 
 export const GET = () => Response.json({ ok: true, rota: "publicar" });
