@@ -78,5 +78,8 @@ export async function GET(_req, { params }) {
 
   // </script> dentro do JSON fecharia a tag do navegador antes da hora.
   const json = JSON.stringify(dados).replace(/<\//g, "<\\/");
-  return html(molde.replace("__DADOS__", json));
+  // aba do navegador: "SEO Grátis" + o site da imobiliária
+  const titulo = ("SEO Grátis " + (dados.dominio || dados.imobiliaria || "")).trim()
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  return html(molde.replace("__DADOS__", json).replace("__TITULO__", titulo));
 }
