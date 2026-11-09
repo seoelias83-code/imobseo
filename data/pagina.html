@@ -503,7 +503,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
     <div class="wrap">
       <div class="offer-grid">
         <div class="offer-txt">
-          <h2 id="ofertaGostou">Gostou do nosso presente para o seu site?</h2>
+          <h2 id="ofertaGostou">Gostou do nosso presente?</h2>
           <p class="oferta-sub" id="ofertaTit">Aproveite e libere mais 900 títulos por apenas R$ 9,99</p>
           <p class="body" id="ofertaTxt">Disponibilizamos os primeiros grátis para que você valide a estratégia. Caso faça sentido para a sua imobiliária, oferecemos mais 1.000 títulos por apenas R$&nbsp;9,99. Aproveite que a oferta é por tempo limitado.</p>
         </div>
@@ -568,7 +568,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 
       <h2>Perguntas frequentes</h2>
       <div class="faq">
-        <details><summary>Como surgiu a ideia?</summary><p>A ideia nasceu de um case real. Na época isso era feito manualmente, dava um trabalhão, mas trouxe ótimos resultados para o site. Hoje, com IA, conseguimos automatizar essa otimização — e este é um MVP para escalar a solução.</p></details>
+        <details><summary>Como surgiu a ideia?</summary><p>A ideia nasceu de um case real. Na época isso era feito manualmente, dava um trabalhão, mas trouxe ótimos resultados para o site. Hoje, com IA, conseguimos automatizar essa otimização e este é o MVP para escalar a solução. Agora se quer conhecer quem inventou isso, acesse <a href="https://www.linkedin.com/in/seoelias83" target="_blank" rel="noopener">linkedin.com/in/seoelias83</a>.</p></details>
         <details open id="faqPreco"><summary>Por que R$ 19,80 e não de graça?</summary><p>Os 100 primeiros são de graça para você conferir o método. Os 900 seguintes custam porque é processamento de verdade: ler o site inteiro, cruzar com a lista de buscas e montar linha por linha.</p></details>
         <details id="faqRelogio"><summary>O que acontece quando o cronômetro zera?</summary><p>O pacote passa a custar R$ 298,00. O cronômetro começou no primeiro acesso do link promocional e não reinicia se você fechar ou abrir em outro aparelho.</p></details>
         <details><summary>Vou precisar trocar de plataforma?</summary><p>Não. O título é um campo de texto na página do imóvel. Funciona em qualquer plataforma, inclusive nas que montam o título sozinhas.</p></details>
@@ -722,12 +722,14 @@ $("zapFlut").href = "https://wa.me/5515974050753?text=" +
   encodeURIComponent("Olá, sou da imobiliária " + nomeCliente);
 // o pacote conta a partir do que ja foi de graca: 1.000 contratados = 900 a liberar
 const aLiberar = Math.max(1, (DATA.pacote || 1000) - brinde.length);
+const GARANTIA = "O pagamento é pelo Mercado Pago, caso não goste do que receber você tem até " +
+                 "7 dias para pedir seu dinheiro de volta.";
 $("ofertaTit").innerHTML =
   "Aproveite e libere mais " + br(aLiberar) + " títulos por apenas R$&nbsp;" + DATA.precoAgora;
 $("ofertaTxt").innerHTML =
   "Apresentamos as primeiras otimizações gratuitamente para validação da estratégia. " +
   "Caso faça sentido para a <b>" + esc(nomeCliente) + "</b>, oferecemos mais " +
-  br(aLiberar) + " títulos por apenas <b>R$&nbsp;" + DATA.precoAgora + "</b>.";
+  br(aLiberar) + " títulos por apenas <b>R$&nbsp;" + DATA.precoAgora + "</b>. " + GARANTIA;
 $("ctaFine").textContent =
   "O cronômetro começou no primeiro acesso do link promocional da imobiliária " + nomeCliente + ".";
 if (DATA.whatsapp) {
@@ -845,7 +847,7 @@ function expira(){
   $("ofertaTxt").innerHTML =
     "Apresentamos as primeiras otimizações gratuitamente para validação da estratégia. " +
     "Caso faça sentido para a <b>" + esc(nomeCliente) + "</b>, são mais " +
-    br(aLiberar) + " títulos por <b>R$&nbsp;" + DATA.precoDepois + "</b>.";
+    br(aLiberar) + " títulos por <b>R$&nbsp;" + DATA.precoDepois + "</b>. " + GARANTIA;
   btnPagar.textContent = "Pagar R$ " + DATA.precoDepois + " no Pix";
   $("ctaFine").textContent = "O preço de lançamento acabou. O pacote continua disponível pelo valor cheio.";
 }
