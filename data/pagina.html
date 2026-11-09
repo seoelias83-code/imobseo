@@ -28,6 +28,12 @@ body{margin:0;font-family:system-ui,sans-serif;overflow-x:hidden}img{max-width:1
   --alert:#8C3A2B;
   --ok:#1F6F4A;
   --logo-h:#383A39;
+  /* cores do Google: a imobiliária em azul, a cidade em amarelo */
+  --g-azul:#4285F4;
+  --g-amarelo:#FBBC05;
+  /* escala de buscas/mês e partes da URL: as mesmas do PDF */
+  --v0:#C21734;--v1:#D9632A;--v2:#E7B42A;--v3:#A9A62B;--v4:#5E9B2E;--v5:#1F7A3D;
+  --auto:#C21734;--otim:#1F7A3D;
 
   --display:"Newsreader",Georgia,"Times New Roman",serif;
   --ui:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -141,19 +147,20 @@ h1{
   font-family:var(--display);font-weight:400;
   font-size:clamp(34px,5.4vw,56px);line-height:1.06;letter-spacing:-.015em;
 }
-h1 em{font-style:normal;color:var(--brass)}
+h1 em{font-style:normal;color:var(--g-amarelo)}
+h1 b,.azul{color:var(--g-azul)}
 .lead{color:var(--ink-2);font-size:clamp(16px,1.7vw,18px);max-width:54ch}
 .dom{
   font-size:14px;font-weight:600;color:var(--brass);
   letter-spacing:.01em;overflow-wrap:anywhere;margin-top:-6px;
 }
 
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r)}
 .stat{background:var(--surface);padding:14px 16px;min-width:0}
 .stat .k{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .stat .v{display:block;font-family:var(--display);font-size:clamp(22px,3vw,30px);line-height:1.15;margin-top:4px;font-variant-numeric:tabular-nums}
 .stat.gain .v{color:var(--brass)}
-@media(max-width:560px){ .stats{grid-template-columns:1fr} }
+@media(max-width:700px){ .stats{grid-template-columns:repeat(2,minmax(0,1fr))} }
 
 /* ---------- prédio ---------- */
 .tower-card{
@@ -339,6 +346,57 @@ h1.longo{font-size:clamp(25px,4vw,40px)}
 .ticks li{display:flex;gap:11px;align-items:flex-start;font-size:15px}
 .ticks li::before{content:"";flex:0 0 auto;width:7px;height:7px;margin-top:8px;background:var(--brass-fill);border-radius:1px}
 
+/* ---------- cores da lista (iguais ao PDF) ---------- */
+.ttl-h{display:flex;flex-wrap:wrap;gap:0 .3em}
+.ttl-h .a{color:var(--auto)} .ttl-h .vs{color:var(--ink-2)} .ttl-h .o{color:var(--otim)}
+.side.before .eyebrow{color:var(--auto)}
+.side.after .eyebrow{color:var(--otim)}
+.slug{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;overflow-wrap:anywhere;text-decoration:none;color:var(--ink-2)}
+.slug span{border-radius:3px;padding:1px 4px}
+.slug .s-tipo{background:#DFF0EA;color:#0E6B5C}
+.slug .s-cid{background:#E3ECFA;color:#1D5FBF}
+.slug .s-qua{background:#FBEFD9;color:#9A5B06}
+.slug .s-m2{background:#EFE7FA;color:#6B3FB3}
+.slug .s-cod{background:#FAE6ED;color:#B3305B}
+.tt mark{background:transparent;color:inherit;border-bottom:2px solid currentColor;padding:0 1px}
+.tt mark.v0{background:rgba(194,23,52,.10);border-color:var(--v0)}
+.tt mark.v1{background:rgba(217,99,42,.12);border-color:var(--v1)}
+.tt mark.v2{background:rgba(231,180,42,.18);border-color:var(--v2)}
+.tt mark.v3{background:rgba(169,166,43,.16);border-color:var(--v3)}
+.tt mark.v4{background:rgba(94,155,46,.14);border-color:var(--v4)}
+.tt mark.v5{background:rgba(31,122,61,.13);border-color:var(--v5)}
+.kw .pt{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px}
+.kw div span.c0 .pt{background:var(--v0)} .kw div span.c1 .pt{background:var(--v1)}
+.kw div span.c2 .pt{background:var(--v2)} .kw div span.c3 .pt{background:var(--v3)}
+.kw div span.c4 .pt{background:var(--v4)} .kw div span.c5 .pt{background:var(--v5)}
+.kw .tot.auto b{color:var(--auto)}
+
+/* ---------- print da planilha ---------- */
+.planilha{margin-top:22px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  position:relative;background:#fff;color:#1b1b1b;font:12px/1.35 Arial,Helvetica,sans-serif}
+.planilha table{border-collapse:collapse;width:100%;table-layout:fixed}
+.planilha th,.planilha td{border:1px solid #E2E2E2;padding:5px 7px;text-align:left;vertical-align:top;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.planilha thead th{background:#F3F3F3;color:#666;font-weight:400;text-align:center;font-size:11px}
+.planilha tbody th{background:#F3F3F3;color:#666;font-weight:400;text-align:center;width:34px;font-size:11px}
+.planilha .cab td{font-weight:700;background:#FAFAFA}
+.planilha col.c-a{width:34px}
+.planilha::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70%;
+  background:linear-gradient(to bottom,rgba(255,255,255,0),#fff 92%);pointer-events:none}
+.baixar-link{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font:inherit;font-weight:600;
+  font-size:15px;color:var(--ink);background:none;border:0;padding:0;cursor:pointer;
+  border-bottom:2px solid var(--otim);padding-bottom:2px}
+.baixar-link:hover{color:var(--otim)}
+
+/* ---------- WhatsApp flutuante ---------- */
+.zap-flut{position:fixed;right:max(18px,env(safe-area-inset-right,0px));
+  bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:40;width:58px;height:58px;border-radius:50%;
+  background:#25D366;display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.18);
+  transition:transform .15s}
+.zap-flut:hover{transform:scale(1.06)}
+.zap-flut svg{width:30px;height:30px;fill:#fff}
+.oferta-sub{font-family:var(--display);font-size:clamp(19px,2.4vw,23px);line-height:1.25;color:var(--ink)}
+
 /* ---------- passos ---------- */
 .steps{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);margin-top:28px}
 @media(min-width:620px){ .steps{grid-template-columns:repeat(2,1fr)} }
@@ -399,17 +457,18 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 
           <span class="tag demo" id="demoFlag">Dados de exemplo</span>
         </div>
-        <h1 id="h1">Ajudamos você a colocar a <b id="h1nome">sua imobiliária</b> no topo do Google em <em id="cidade">Sorocaba</em></h1>
+        <h1 id="h1">Ajudamos a colocar a imobiliária <b id="h1nome">sua imobiliária</b> no topo do Google em <em id="cidade">Sorocaba</em> sem pagar por cliques</h1>
 
         <p class="assina"><img class="logo" alt="" width="182" height="100" src="data:image/png;base64,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"><span>Gerado por <b id="empresa">Loja das Palavras</b></span></p>
 
         <p class="lead" id="lead">Otimizamos <b>100 títulos</b> da <b>sua imobiliária</b> e, ajustando as palavras, é possível dobrar ou até triplicar os cliques do seu site, gerando tráfego sem custo pelo Google e também nos portais Zap Imóveis, Viva Real, Chaves na Mão, Imóvel Web, OLX e tantos outros parceiros Kenlo.</p>
         <div class="stats">
-          <div class="stat"><span class="k">Páginas no site</span><span class="v num" id="sPaginas">3.070</span></div>
-          <div class="stat"><span class="k">Já analisadas</span><span class="v num" id="sAnalisadas">1.396</span></div>
-          <div class="stat gain"><span class="k">Alcance de busca</span><span class="v num" id="sGanho">—</span></div>
+          <div class="stat"><span class="k">Páginas de imóveis</span><span class="v num" id="sPaginas">3.070</span></div>
+          <div class="stat"><span class="k">Já otimizadas</span><span class="v num" id="sAnalisadas">1.396</span></div>
+          <div class="stat"><span class="k">Disponíveis gratuitamente</span><span class="v num" id="sGratis">100</span></div>
+          <div class="stat gain"><span class="k">Ganho de relevância</span><span class="v num" id="sGanho">—</span></div>
         </div>
-        <p class="fine">Comparamos o total de buscas de mais de 1.000 palavras e reorganizamos os títulos escolhendo as de maior volume. Aplicando essa estratégia em massa é possível enriquecer o site, gerando mais contatos, visitas e negócios. É estimativa de alcance, não previsão de visitas. Confira abaixo alguns exemplos:</p>
+        <p class="fine">Comparamos o total de buscas de mais de 10.000 palavras e reorganizamos os títulos escolhendo as combinações mais relevantes para quem busca comprar ou alugar imóveis. Com isso é possível enriquecer o site, ganhando mais visibilidade na internet, gerando mais contatos, visitas e negócios. Os dados abaixo representam a quantidade de buscas mensais no Google, não a previsão de visitas.</p>
       </div>
 
       <aside class="tower-card">
@@ -431,17 +490,12 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 
   <section class="band">
     <div class="wrap">
-      <span class="eyebrow" id="brindeEyebrow">Seu presente · 90 títulos</span>
-      <h2 style="margin-top:10px">Título atual &times; Título otimizado</h2>
+      <span class="eyebrow azul" id="brindeEyebrow">sua imobiliária</span>
+      <h2 class="ttl-h" style="margin-top:10px"><span class="a">Título Automatizado</span><span class="vs">vs</span><span class="o">Título Otimizado</span></h2>
       <p class="body" style="margin-top:12px">Compare o volume de buscas das combinações exatas de palavras dos títulos atuais pelas mesmas informações na versão otimizada.</p>
       <div class="pairs" id="pairs"></div>
-      <div class="baixa">
-        <h3 id="baixaTit">Baixe as 100 primeiras otimizações gratuitamente</h3>
-        <div class="mais-wrap">
-          <button class="btn-sec" id="baixar" type="button">Baixar a planilha</button>
-          <button class="btn-sec" id="verMais" type="button" hidden>Ver os 90</button>
-        </div>
-      </div>
+      <div class="planilha" id="planilha" aria-hidden="true"></div>
+      <button class="baixar-link" id="baixar" type="button">Baixar a planilha</button>
     </div>
   </section>
 
@@ -449,8 +503,8 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
     <div class="wrap">
       <div class="offer-grid">
         <div class="offer-txt">
-          <span class="eyebrow" id="ofertaEyebrow">Aproveite!</span>
-          <h2 id="ofertaTit">Libere mais 900 títulos</h2>
+          <h2 id="ofertaGostou">Gostou do nosso presente para o seu site?</h2>
+          <p class="oferta-sub" id="ofertaTit">Aproveite e libere mais 900 títulos por apenas R$ 9,99</p>
           <p class="body" id="ofertaTxt">Disponibilizamos os primeiros grátis para que você valide a estratégia. Caso faça sentido para a sua imobiliária, oferecemos mais 1.000 títulos por apenas R$&nbsp;9,99. Aproveite que a oferta é por tempo limitado.</p>
         </div>
 
@@ -466,7 +520,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
           </div>
           <div class="passo" id="passoInicio">
             <button class="cta" id="btnPagar" type="button">Pagar R$ 9,99 no Pix</button>
-            <p class="fine" id="ctaFine">O relógio começou quando você leu o QR code. Não reinicia.</p>
+            <p class="fine" id="ctaFine">O cronômetro começou no primeiro acesso do link promocional da imobiliária.</p>
           </div>
 
           <form class="passo" id="passoEmail" hidden>
@@ -505,12 +559,6 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
         </div>
       </div>
 
-      <div class="steps">
-        <div class="step"><span class="n num">1</span><h3>Lemos e organizamos a estrutura do seu site</h3></div>
-        <div class="step"><span class="n num">2</span><h3>Comparamos dados e reorganizamos as palavras</h3></div>
-        <div class="step"><span class="n num">3</span><h3>Disponibilizamos online para copiar e colar</h3></div>
-        <div class="step"><span class="n num">4</span><h3>Se preferir, atualizamos seu site para você</h3></div>
-      </div>
     </div>
   </section>
 
@@ -518,10 +566,11 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
     <div class="wrap">
 
 
+      <h2>Perguntas frequentes</h2>
       <div class="faq">
         <details><summary>Como surgiu a ideia?</summary><p>A ideia nasceu de um case real. Na época isso era feito manualmente, dava um trabalhão, mas trouxe ótimos resultados para o site. Hoje, com IA, conseguimos automatizar essa otimização — e este é um MVP para escalar a solução.</p></details>
         <details open id="faqPreco"><summary>Por que R$ 19,80 e não de graça?</summary><p>Os 100 primeiros são de graça para você conferir o método. Os 900 seguintes custam porque é processamento de verdade: ler o site inteiro, cruzar com a lista de buscas e montar linha por linha.</p></details>
-        <details id="faqRelogio"><summary>O que acontece quando o relógio zera?</summary><p>O pacote passa a custar R$ 298,00. O relógio começou na primeira vez que esta página abriu e não reinicia se você fechar ou abrir em outro aparelho.</p></details>
+        <details id="faqRelogio"><summary>O que acontece quando o cronômetro zera?</summary><p>O pacote passa a custar R$ 298,00. O cronômetro começou no primeiro acesso do link promocional e não reinicia se você fechar ou abrir em outro aparelho.</p></details>
         <details><summary>Vou precisar trocar de plataforma?</summary><p>Não. O título é um campo de texto na página do imóvel. Funciona em qualquer plataforma, inclusive nas que montam o título sozinhas.</p></details>
         <details><summary>E as demais páginas?</summary><p>Quer otimizar o site inteiro e conhecer outras soluções para imobiliária? A gente combina no WhatsApp: dá para fechar o restante das páginas e tratar das outras frentes que trazem busca sem custo por clique.</p></details>
       </div>
@@ -537,6 +586,10 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
     <span style="margin-left:auto" id="footCode">Código A7F2K9</span>
   </div>
 </footer>
+
+<a class="zap-flut" id="zapFlut" href="https://wa.me/5515974050753" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.04 3C9.4 3 4 8.32 4 14.88c0 2.3.66 4.45 1.82 6.27L4 28.5l7.6-1.97a12.2 12.2 0 0 0 4.44.84h.01C22.67 27.37 28 22.05 28 15.5 28 8.93 22.67 3 16.04 3zm0 22.3h-.01a10 10 0 0 1-4.1-.88l-.3-.14-4.5 1.17 1.2-4.3-.2-.32a9.7 9.7 0 0 1-1.6-5.37c0-5.4 4.46-9.8 9.5-9.8 5.27 0 9.75 4.6 9.75 9.98 0 5.38-4.47 9.66-9.74 9.66zm5.35-7.27c-.29-.15-1.73-.85-2-.95-.27-.1-.46-.15-.66.15-.2.29-.76.95-.93 1.14-.17.2-.34.22-.63.07-.29-.14-1.23-.45-2.34-1.44-.86-.77-1.45-1.72-1.62-2-.17-.3-.02-.45.13-.6.13-.13.3-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.07-.15-.66-1.58-.9-2.16-.24-.57-.48-.49-.66-.5h-.56c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43 0 1.43 1.05 2.82 1.2 3.01.14.2 2.06 3.14 4.99 4.4.7.3 1.24.48 1.67.62.7.22 1.34.19 1.84.12.56-.08 1.73-.7 1.97-1.39.25-.68.25-1.27.17-1.39-.07-.12-.27-.2-.56-.34z"/></svg>
+</a>
 
 <script>
 const DATA = __DADOS__;
@@ -554,7 +607,7 @@ if (DATA.cidade) {
 } else {
   // sem cidade o título fecharia com um "em" solto
   const em = $("cidade");
-  em.previousSibling.textContent = " no topo do Google.";
+  em.previousSibling.textContent = " no topo do Google";
   em.remove();
 }
 
@@ -565,7 +618,7 @@ $("sAnalisadas").textContent = br(DATA.analisadas);
 // dois números e tira a escala falsa de cena.
 const somaKw = (lista, campo) =>
   lista.reduce((t, e) => t + (e[campo] || []).reduce((s, [, v]) => s + (v || 0), 0), 0);
-$("bigWas").innerHTML      = "depois das 24h, R$&nbsp;" + DATA.precoDepois;
+$("bigWas").innerHTML      = "depois de 24 horas o valor será R$&nbsp;" + DATA.precoDepois;
 if(!DATA.demo) $("demoFlag").hidden = true;
 
 /* ---- prédio: 1 andar = 100 páginas ---- */
@@ -597,19 +650,53 @@ tower.setAttribute("aria-label",
   "Prédio com " + andares + " andares, " + acesos + " acesos");
 
 /* ---- títulos antes/depois ---- */
+/* faixa de buscas/mês -> cor, a mesma escala do PDF */
+const faixa = v => v <= 100 ? 0 : v <= 1000 ? 1 : v <= 5000 ? 2 : v <= 20000 ? 3 : v <= 100000 ? 4 : 5;
 function kwBlock(list, lado){
+  list = list || [];
   if(!list.length) return '<div class="none">nenhuma palavra ativa</div>';
   const total = list.reduce((s,[,v])=>s+v,0);
   return `<div class="kw-h">Buscas/mês</div>`
-       + list.map(([k,v])=>`<div><span>${k}</span><b>${br(v)}</b></div>`).join("")
-       + `<div class="tot ${lado}"><span>${lado === "auto" ? "Título automático" : "Título otimizado"}</span>`
+       + list.map(([k,v])=>`<div><span class="c${faixa(v)}"><i class="pt"></i>${esc(k)}</span><b>${br(v)}</b></div>`).join("")
+       + `<div class="tot ${lado}"><span>${lado === "auto" ? "Título automatizado" : "Título otimizado"}</span>`
        + `<b>${br(total)}</b></div>`;
 }
+/* marca no título as palavras que têm busca, com a cor da faixa */
+function marcar(titulo, list){
+  let html = esc(titulo || "");
+  const kws = (list || []).filter(([k]) => k).sort((a, b) => b[0].length - a[0].length);
+  if (!kws.length) return html;
+  const re = new RegExp("(" + kws.map(([k]) => esc(k).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")", "gi");
+  const vol = {};
+  kws.forEach(([k, v]) => { vol[esc(k).toLowerCase()] = v; });
+  return html.replace(re, m => `<mark class="v${faixa(vol[m.toLowerCase()] || 0)}">${m}</mark>`);
+}
+/* URL com as partes coloridas: tipo, cidade, quartos, metragem e código */
+function slugColorido(url){
+  if (!url) return "";
+  let caminho = url;
+  try { caminho = new URL(url).pathname; } catch {}
+  const partes = caminho.split("/").filter(Boolean);
+  const slug = partes.length > 1 ? partes[partes.length - 2] : (partes[0] || "");
+  const cod = partes.length > 1 ? partes[partes.length - 1] : "";
+  const tok = [];
+  let resto = slug;
+  const mQ = resto.match(/(\d+-quartos?)/), mM = resto.match(/(\d+-m)(?:$|-)/);
+  const tipo = resto.split("-")[0];
+  let cidade = resto.slice(tipo.length + 1);
+  if (mQ) cidade = cidade.split("-" + mQ[1])[0].replace(mQ[1], "");
+  else if (mM) cidade = cidade.split("-" + mM[1])[0];
+  tok.push(`<span class="s-tipo">${esc(tipo)}</span>`);
+  if (cidade) tok.push(`<span class="s-cid">${esc(cidade.replace(/-$/, ""))}</span>`);
+  if (mQ) tok.push(`<span class="s-qua">${esc(mQ[1])}</span>`);
+  if (mM) tok.push(`<span class="s-m2">${esc(mM[1])}</span>`);
+  if (cod) tok.push(`<span class="s-cod">${esc(cod.split("-")[0])}</span>`);
+  return `<a class="slug" href="${esc(url)}" target="_blank" rel="noopener" title="${esc(url)}">${tok.join("-")}</a>`;
+}
 const brinde = DATA.brinde || DATA.exemplos || [];
-const ABERTOS = 6;   // quantos aparecem antes de clicar em "Ver os 90"
+const ABERTOS = 3;   // só 3 exemplos; o resto vai na planilha
 
 const plural = brinde.length === 1 ? " título" : " títulos";
-$("brindeEyebrow").textContent = "Seu presente · " + brinde.length + plural;
 
 // alcance: o quanto as palavras novas somam a mais que as de hoje
 const antesTot = somaKw(brinde, "antesKw");
@@ -621,24 +708,28 @@ $("sGanho").textContent = antesTot > 0
   : (depoisTot > 0 ? "novo" : "\u2014");
 /* O texto de cima cita o numero real do brinde e o nome do cliente. */
 const nomeCliente = DATA.imobiliaria || "sua imobiliária";
+$("brindeEyebrow").textContent = nomeCliente;
+$("sGratis").textContent = br(brinde.length);
 $("lead").innerHTML =
-  "Otimizamos <b>" + brinde.length + plural + "</b> do seu site. Ajustando as " +
-  "palavras é possível dobrar ou até triplicar os cliques, gerando tráfego sem " +
-  "custo pelo Google e também nos portais Zap Imóveis, Viva Real, Chaves na Mão, " +
-  "Imóvel Web, OLX e tantos outros parceiros Kenlo.";
+  "A plataforma da sua imobiliária gera títulos de forma automatizada. Reordenando as " +
+  "palavras, é possível alcançar até 10x mais cliques, como foi o caso de uma imobiliária " +
+  "em Sorocaba que foi de 700 cliques mensais para mais de 7.000. E o melhor é que essa " +
+  "otimização também aumenta a visibilidade da <b>" + esc(nomeCliente) + "</b> nos portais " +
+  "parceiros como Zap Imóveis, Viva Real, Chaves na Mão, Imóvel Web, entre outros.";
 $("barGratis").textContent = brinde.length + " otimizações grátis";
-$("baixaTit").textContent =
-  "Baixe " + (brinde.length === 1 ? "a primeira otimização" :
-              "as " + brinde.length + " primeiras otimizações") + " gratuitamente";
+$("baixar").textContent = "Baixar a planilha com os " + brinde.length + plural;
+$("zapFlut").href = "https://wa.me/5515974050753?text=" +
+  encodeURIComponent("Olá, sou da imobiliária " + nomeCliente);
 // o pacote conta a partir do que ja foi de graca: 1.000 contratados = 900 a liberar
 const aLiberar = Math.max(1, (DATA.pacote || 1000) - brinde.length);
 $("ofertaTit").innerHTML =
-  "Libere mais " + br(aLiberar) + " títulos por apenas R$&nbsp;" + DATA.precoAgora;
+  "Aproveite e libere mais " + br(aLiberar) + " títulos por apenas R$&nbsp;" + DATA.precoAgora;
 $("ofertaTxt").innerHTML =
-  "Disponibilizamos os primeiros grátis para que você valide a estratégia. " +
+  "Apresentamos as primeiras otimizações gratuitamente para validação da estratégia. " +
   "Caso faça sentido para a <b>" + esc(nomeCliente) + "</b>, oferecemos mais " +
-  br(aLiberar) + " títulos por apenas <b>R$&nbsp;" + DATA.precoAgora +
-  "</b>. Aproveite que a oferta é por tempo limitado.";
+  br(aLiberar) + " títulos por apenas <b>R$&nbsp;" + DATA.precoAgora + "</b>.";
+$("ctaFine").textContent =
+  "O cronômetro começou no primeiro acesso do link promocional da imobiliária " + nomeCliente + ".";
 if (DATA.whatsapp) {
   const z = String(DATA.whatsapp).replace(/\D/g, "").replace(/^55/, "");
   $("footZap").textContent = "WhatsApp: " + (z.length >= 10
@@ -662,8 +753,8 @@ $("faqPreco").querySelector("p").textContent =
   br(aLiberar) + " seguintes custam porque é processamento de verdade: ler o site " +
   "inteiro, cruzar com a lista de buscas e montar linha por linha.";
 $("faqRelogio").querySelector("p").textContent =
-  "O pacote passa a custar R$ " + DATA.precoDepois + ". O relógio começou na primeira " +
-  "vez que esta página abriu e não reinicia se você fechar ou abrir em outro aparelho.";
+  "O pacote passa a custar R$ " + DATA.precoDepois + ". O cronômetro começou no primeiro " +
+  "acesso do link promocional e não reinicia se você fechar ou abrir em outro aparelho.";
 
 /* O caminho da página, sem o domínio, que se repete em todas e só ocupa espaço.
    O link inteiro fica no href, pra abrir a página de verdade. */
@@ -681,38 +772,38 @@ function cartao(e, i) {
   return `
   <article class="pair">
     <div class="lin"><span class="n num">${String(i + 1).padStart(2, "0")}</span>
-      ${pagina(e.url) || "<span></span>"}</div>
+      ${slugColorido(e.url) || "<span></span>"}</div>
     <div class="side before">
-      <span class="eyebrow">Atual</span>
-      <p class="tt">${e.antes || "—"}</p>
+      <span class="eyebrow">Título automatizado</span>
+      <p class="tt">${e.antes ? marcar(e.antes, e.antesKw) : "—"}</p>
       <div class="kw">${kwBlock(e.antesKw, "auto")}</div>
     </div>
     <div class="side after">
-      <span class="eyebrow">Otimizado</span>
-      <p class="tt">${e.depois}</p>
+      <span class="eyebrow">Título otimizado</span>
+      <p class="tt">${marcar(e.depois, e.depoisKw)}</p>
       <div class="kw">${kwBlock(e.depoisKw, "otim")}</div>
       <button class="copiar" type="button" data-i="${i}">Copiar título</button>
     </div>
   </article>`;
 }
 
-let tudoAberto = false;
-function pintarBrinde() {
-  const lista = tudoAberto ? brinde : brinde.slice(0, ABERTOS);
-  $("pairs").innerHTML = lista.map(cartao).join("");
-  const btn = $("verMais");
-  btn.hidden = brinde.length <= ABERTOS;
-  btn.textContent = tudoAberto
-    ? "Mostrar menos"
-    : "Ver os " + brinde.length;
-}
-pintarBrinde();
+$("pairs").innerHTML = brinde.slice(0, ABERTOS).map(cartao).join("");
 
-$("verMais").addEventListener("click", () => {
-  tudoAberto = !tudoAberto;
-  pintarBrinde();
-  if (!tudoAberto) $("pairs").scrollIntoView({ behavior: "smooth", block: "start" });
-});
+/* "print" da planilha: as linhas seguintes, do jeito que abrem no Excel */
+(function planilha() {
+  const linhas = brinde.slice(ABERTOS, ABERTOS + 7);
+  if (!linhas.length) { $("planilha").hidden = true; return; }
+  const cel = t => `<td>${esc(t || "")}</td>`;
+  let h = '<table><colgroup><col class="c-a"><col style="width:6%"><col style="width:26%"><col style="width:34%"><col style="width:34%"></colgroup>'
+        + '<thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead><tbody>'
+        + '<tr class="cab"><th>1</th>' + cel("#") + cel("Página") + cel("Título atual") + cel("Título otimizado") + '</tr>';
+  linhas.forEach((e, k) => {
+    let caminho = e.url || "";
+    try { caminho = new URL(e.url).pathname; } catch {}
+    h += `<tr><th>${k + 2}</th>` + cel(ABERTOS + k + 1) + cel(caminho) + cel(e.antes) + cel(e.depois) + "</tr>";
+  });
+  $("planilha").innerHTML = h + "</tbody></table>";
+})();
 
 // Copiar fica no container: os cartoes sao redesenhados, os listeners nao.
 $("pairs").addEventListener("click", async ev => {
@@ -750,10 +841,9 @@ function expira(){
   $("bigPrice").textContent  = "R$ " + DATA.precoDepois;
   $("bigWas").textContent    = "o preço de R$ " + DATA.precoAgora + " era válido por 24h";
   $("clockLabel").textContent = "Prazo encerrado";
-  $("ofertaTit").innerHTML = "Libere mais " + br(aLiberar) + " títulos por R$&nbsp;" + DATA.precoDepois;
-  $("ofertaEyebrow").textContent = "Pacote completo";
+  $("ofertaTit").innerHTML = "Aproveite e libere mais " + br(aLiberar) + " títulos por R$&nbsp;" + DATA.precoDepois;
   $("ofertaTxt").innerHTML =
-    "Disponibilizamos os primeiros grátis para que você valide a estratégia. " +
+    "Apresentamos as primeiras otimizações gratuitamente para validação da estratégia. " +
     "Caso faça sentido para a <b>" + esc(nomeCliente) + "</b>, são mais " +
     br(aLiberar) + " títulos por <b>R$&nbsp;" + DATA.precoDepois + "</b>.";
   btnPagar.textContent = "Pagar R$ " + DATA.precoDepois + " no Pix";
@@ -896,9 +986,9 @@ $("baixar").addEventListener("click", () => {
     body: JSON.stringify({ codigo: DATA.codigo }),
   }).catch(() => {});
 
-  const btn = $("baixar");
+  const btn = $("baixar"), antes = btn.textContent;
   btn.textContent = "Baixado";
-  setTimeout(() => { btn.textContent = "Baixar a planilha"; }, 2600);
+  setTimeout(() => { btn.textContent = antes; }, 2600);
 });
 
 /* Link do WhatsApp pra quem já pagou e quer que a gente aplique. */
