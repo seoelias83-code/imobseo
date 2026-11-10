@@ -886,6 +886,11 @@ function tick(){
   $("barClock").textContent = txt;
   $("bigClock").textContent = txt;
 }
+// visita sua e o cliente ainda não abriu: o relógio fica parado em 24:00:00
+if (DATA.interno && !DATA.relogioCliente) {
+  $("barClock").textContent = $("bigClock").textContent = "24:00:00";
+  relogioParado = true;
+}
 tick();
 setInterval(tick,1000);
 

@@ -54,8 +54,10 @@ export async function GET(req, { params }) {
   if (!oferta) return html(semCodigo, 404);
 
   const interno = ehInterno(req) || ((await ehIpInterno(ipDe(req))) ? "ip" : "");
+  // visita sua: lê o cronômetro do cliente se ele já abriu; se não abriu, o relógio fica parado
+  const aberturaCliente = interno ? await lerAbertura(codigo) : null;
   const abertura = interno
-    ? (await lerAbertura(codigo)) || new Date().toISOString()
+    ? aberturaCliente || new Date().toISOString()
     : await primeiraAbertura(codigo);
   const pedido = await lerPedido(codigo);
 
@@ -85,6 +87,7 @@ export async function GET(req, { params }) {
     empresa: oferta.empresa || "",
     dominio: oferta.dominio || "",
     interno: Boolean(interno),
+    relogioCliente: !interno || Boolean(aberturaCliente),
   };
 
   const molde = await readFile(
