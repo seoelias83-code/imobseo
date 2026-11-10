@@ -112,14 +112,25 @@ a{color:inherit}
   position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
   background:var(--surface);border-bottom:1px solid var(--line);
 }
-/* No celular o nome fica sozinho em cima e as duas etiquetas embaixo;
-   a partir de 700px tudo cabe numa linha só. */
-.bar-in{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding-block:10px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
+/* No celular: nome e Compartilhar em cima, as duas etiquetas embaixo.
+   A partir de 700px tudo cabe numa linha só, com o Compartilhar no canto direito. */
+.bar-in{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"mark share" "chips chips";
+  align-items:center;gap:8px 12px;padding-block:10px}
+.bar-in .mark{grid-area:mark}
+.chips{grid-area:chips;display:flex;flex-wrap:wrap;gap:8px}
+.share{grid-area:share}
 @media(min-width:700px){
-  .bar-in{flex-direction:row;align-items:center;gap:16px}
-  .chips{margin-left:auto;gap:12px}
+  .bar-in{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"mark chips share";gap:16px}
+  .chips{justify-self:end;gap:12px}
 }
+.share{
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font:inherit;font-size:13px;font-weight:600;color:var(--ink);
+  background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 14px;
+  transition:border-color .2s,color .2s;
+}
+.share:hover{border-color:var(--brass);color:var(--brass)}
+.share svg{width:14px;height:14px;flex:0 0 auto}
 .mark{font-family:var(--display);font-size:16px;letter-spacing:.01em;
   line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mark b{font-weight:500}
@@ -447,6 +458,10 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
       <div class="chip"><span class="val" id="barGratis">100 otimizações grátis</span></div>
       <div class="chip"><span class="lbl">Acaba em</span><span class="val num" id="barClock">24:00:00</span></div>
     </div>
+    <button class="share" id="compartilhar" type="button" aria-label="Compartilhar esta página">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/></svg>
+      <span id="compartilharTxt">Compartilhar</span>
+    </button>
   </div>
 </div>
 
@@ -1025,6 +1040,25 @@ $("baixar").addEventListener("click", () => {
   const btn = $("baixar"), antes = btn.textContent;
   btn.textContent = "Baixado";
   setTimeout(() => { btn.textContent = antes; }, 2600);
+});
+
+/* Compartilhar com os outros decisores: o link limpo, sem ?interno */
+$("compartilhar").addEventListener("click", async () => {
+  const url = location.origin + location.pathname;
+  const nome = DATA.imobiliaria || DATA.dominio || "imobiliária";
+  const texto = "Diagnóstico de SEO dos títulos da " + nome + ": " + url;
+  if (navigator.share) {
+    try { await navigator.share({ title: document.title, text: texto, url }); return; }
+    catch (e) { if (e && e.name === "AbortError") return; }
+  }
+  try { await navigator.clipboard.writeText(url); }
+  catch {
+    const t = document.createElement("textarea"); t.value = url; document.body.appendChild(t);
+    t.select(); document.execCommand("copy"); t.remove();
+  }
+  const el = $("compartilharTxt"), antes = el.textContent;
+  el.textContent = "Link copiado";
+  setTimeout(() => { el.textContent = antes; }, 2400);
 });
 
 /* Link do WhatsApp pra quem já pagou e quer que a gente aplique. */
