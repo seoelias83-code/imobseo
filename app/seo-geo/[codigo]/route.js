@@ -7,6 +7,8 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import {
+  ehIpInterno,
+  ipDe,
   lerAbertura,
   lerOferta,
   lerPedido,
@@ -51,7 +53,7 @@ export async function GET(req, { params }) {
   const oferta = await lerOferta(codigo);
   if (!oferta) return html(semCodigo, 404);
 
-  const interno = ehInterno(req);
+  const interno = ehInterno(req) || ((await ehIpInterno(ipDe(req))) ? "ip" : "");
   const abertura = interno
     ? (await lerAbertura(codigo)) || new Date().toISOString()
     : await primeiraAbertura(codigo);

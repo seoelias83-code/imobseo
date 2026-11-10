@@ -8,6 +8,7 @@
  * aquele cliente baixou os 100 títulos antes de decidir.
  */
 import { getRedis } from "@/lib/redis";
+import { ehIpInterno, ipDe } from "@/lib/oferta";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -24,6 +25,9 @@ export async function POST(req) {
     /* corpo vazio: cai no erro abaixo */
   }
   if (!codigo) return Response.json({ erro: "sem código" }, { status: 400 });
+
+  // download feito do seu computador não conta
+  if (await ehIpInterno(ipDe(req))) return Response.json({ ok: true, interno: true }, { headers: sem });
 
   const n = await getRedis().incr(`baixou:${codigo}`);
   return Response.json({ ok: true, n }, { headers: sem });
