@@ -235,6 +235,7 @@ h1 b,.azul{color:var(--g-azul)}
 .lin{align-items:center;gap:8px}
 .lin .n{font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums;flex:0 0 auto}
 .lin .url{min-width:0}
+.lin-tx{display:flex;flex-direction:column;gap:4px;min-width:0}
 .copiar{
   font:inherit;font-size:12px;font-weight:600;cursor:pointer;align-self:flex-start;
   background:none;border:1px solid var(--line);border-radius:var(--r);
@@ -772,11 +773,17 @@ function pagina(url) {
   return `<a class="url" href="${esc(url)}" target="_blank" rel="noopener" title="${esc(url)}">${esc(curto)}</a>`;
 }
 
+/* o link da página embaixo do slug, igual ao PDF */
+function linkInteiro(url) {
+  if (!url) return "";
+  return `<a class="url" href="${esc(url)}" target="_blank" rel="noopener">${esc(url.replace(/^https?:\/\//, ""))}</a>`;
+}
+
 function cartao(e, i) {
   return `
   <article class="pair">
     <div class="lin"><span class="n num">${String(i + 1).padStart(2, "0")}</span>
-      ${slugColorido(e.url) || "<span></span>"}</div>
+      <div class="lin-tx">${slugColorido(e.url) || ""}${linkInteiro(e.url)}</div></div>
     <div class="side before">
       <span class="eyebrow">Título automatizado</span>
       <p class="tt">${e.antes ? marcar(e.antes, e.antesKw) : "—"}</p>
