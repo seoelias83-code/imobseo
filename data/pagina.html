@@ -157,12 +157,12 @@ h1 b,.azul{color:var(--g-azul)}
   letter-spacing:.01em;overflow-wrap:anywhere;margin-top:-6px;
 }
 
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r)}
 .stat{background:var(--surface);padding:14px 16px;min-width:0}
 .stat .k{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .stat .v{display:block;font-family:var(--display);font-size:clamp(22px,3vw,30px);line-height:1.15;margin-top:4px;font-variant-numeric:tabular-nums}
 .stat.gain .v{color:var(--brass)}
-@media(max-width:700px){ .stats{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media(max-width:380px){ .stat{padding:12px 8px} .stat .k{font-size:10px;letter-spacing:.04em} }
 
 /* ---------- prédio ---------- */
 .tower-card{
@@ -460,15 +460,14 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
 
           <span class="tag demo" id="demoFlag">Dados de exemplo</span>
         </div>
-        <h1 id="h1">Ajudamos a colocar a imobiliária <b id="h1nome">sua imobiliária</b> no <span class="g-verde">topo do Google</span> em <em id="cidade">Sorocaba</em> sem pagar por cliques</h1>
+        <h1 id="h1">Conquiste o <span class="g-verde">topo do Google</span> em <em id="cidade">Sorocaba</em> sem pagar por cliques.</h1>
 
         <p class="assina"><img class="logo" alt="" width="182" height="99" src="data:image/png;base64,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"><span>Gerado por <b id="empresa">White Label</b></span></p>
 
         <p class="lead" id="lead">Otimizamos <b>100 títulos</b> da <b>sua imobiliária</b> e, ajustando as palavras, é possível dobrar ou até triplicar os cliques do seu site, gerando tráfego sem custo pelo Google e também nos portais Zap Imóveis, Viva Real, Chaves na Mão, Imóvel Web, OLX e tantos outros parceiros Kenlo.</p>
         <div class="stats">
           <div class="stat"><span class="k">Páginas de imóveis</span><span class="v num" id="sPaginas">3.070</span></div>
-          <div class="stat"><span class="k">Imóveis otimizados</span><span class="v num" id="sAnalisadas">1.396</span></div>
-          <div class="stat"><span class="k">Disponíveis gratuitamente</span><span class="v num" id="sGratis">100</span></div>
+          <div class="stat"><span class="k">Otimizados gratui&shy;tamente</span><span class="v num" id="sGratis">100</span></div>
           <div class="stat gain"><span class="k">Ganho de relevância</span><span class="v num" id="sGanho">—</span></div>
         </div>
         <p class="fine">Comparamos o total de buscas de mais de 10.000 palavras e reorganizamos os títulos escolhendo as combinações mais relevantes para quem busca comprar ou alugar imóveis. Com isso é possível enriquecer o site, ganhando mais visibilidade na internet, gerando mais contatos, visitas e negócios. Os dados abaixo representam a quantidade de buscas mensais no Google, não a previsão de visitas.</p>
@@ -495,7 +494,7 @@ footer b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:1
     <div class="wrap">
       <span class="eyebrow azul" id="brindeEyebrow">sua imobiliária</span>
       <h2 class="ttl-h" style="margin-top:10px"><span class="a">Título Automatizado</span><span class="vs">vs</span><span class="o">Título Otimizado</span></h2>
-      <p class="body" style="margin-top:12px">Compare o volume de buscas das combinações exatas de palavras dos títulos atuais pelas mesmas informações na versão otimizada.</p>
+      <p class="body" style="margin-top:12px">Compare o volume de buscas das combinações exatas de palavras dos títulos atuais pelas mesmas informações na versão otimizada. Agora multiplique essas otimizações por dezenas, centenas ou milhares de páginas.</p>
       <div class="pairs" id="pairs"></div>
       <div class="planilha" id="planilha" aria-hidden="true"></div>
       <button class="baixar-link" id="baixar" type="button">Baixar a planilha</button>
@@ -615,7 +614,7 @@ if (DATA.cidade) {
 }
 
 $("sPaginas").textContent  = br(DATA.paginas);
-$("sAnalisadas").textContent = br(DATA.analisadas);
+if ($("sAnalisadas")) $("sAnalisadas").textContent = br(DATA.analisadas);
 // A soma de buscas dava dezenas de milhões e não convence ninguém: o volume de
 // "casa à venda" é nacional, não é tráfego do site. A proporção usa os mesmos
 // dois números e tira a escala falsa de cena.
@@ -748,7 +747,7 @@ if (DATA.revendedor) {
   $("footCons").hidden = false;
 }
 $("marcaNome").textContent = nomeCliente;
-$("h1nome").textContent = nomeCliente;
+if ($("h1nome")) $("h1nome").textContent = nomeCliente;
 if (nomeCliente.length > 16) $("h1").classList.add("longo");
 if (DATA.empresa) $("empresa").textContent = DATA.empresa;
 $("faqPreco").querySelector("summary").textContent =
@@ -1016,8 +1015,8 @@ $("baixar").addEventListener("click", () => {
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 
-  // conta pra você saber se o QR virou interesse de verdade
-  fetch("/api/baixou", {
+  // conta pra você saber se o QR virou interesse de verdade (visita sua não conta)
+  if (!DATA.interno) fetch("/api/baixou", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ codigo: DATA.codigo }),

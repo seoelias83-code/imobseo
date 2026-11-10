@@ -7,6 +7,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import {
+  lerAbertura,
   lerOferta,
   lerPedido,
   primeiraAbertura,
@@ -18,11 +19,20 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const html = (corpo, status = 200) =>
+const html = (corpo, status = 200, extra = {}) =>
   new Response(corpo, {
     status,
-    headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" },
+    headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", ...extra },
   });
+
+// Visita sua (link aberto pelo CRM com ?interno=1): não liga o cronômetro do cliente nem conta
+// download. O cookie marca este navegador, então depois o link normal também não conta.
+const COOKIE_INTERNO = "imobseo_interno";
+const ehInterno = (req) => {
+  const url = new URL(req.url);
+  if (url.searchParams.get("interno") === "1") return "novo";
+  return (req.headers.get("cookie") || "").split(/;\s*/).includes(`${COOKIE_INTERNO}=1`) ? "cookie" : "";
+};
 
 const semCodigo = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Página não encontrada</title>
@@ -34,14 +44,17 @@ background:#F1F3EF;color:#16211C;padding:24px;text-align:center}p{max-width:34ch
 
 const reais = (n) => Number(n).toFixed(2).replace(".", ",");
 
-export async function GET(_req, { params }) {
+export async function GET(req, { params }) {
   const { codigo: bruto } = await params;
   const codigo = String(bruto || "").trim().toUpperCase();
 
   const oferta = await lerOferta(codigo);
   if (!oferta) return html(semCodigo, 404);
 
-  const abertura = await primeiraAbertura(codigo);
+  const interno = ehInterno(req);
+  const abertura = interno
+    ? (await lerAbertura(codigo)) || new Date().toISOString()
+    : await primeiraAbertura(codigo);
   const pedido = await lerPedido(codigo);
 
   const dados = {
@@ -69,6 +82,7 @@ export async function GET(_req, { params }) {
     revendedor: oferta.revendedor || "",
     empresa: oferta.empresa || "",
     dominio: oferta.dominio || "",
+    interno: Boolean(interno),
   };
 
   const molde = await readFile(
@@ -81,5 +95,8 @@ export async function GET(_req, { params }) {
   // aba do navegador: "SEO Grátis" + o site da imobiliária
   const titulo = ("SEO Grátis " + (dados.dominio || dados.imobiliaria || "")).trim()
     .replace(/&/g, "&amp;").replace(/</g, "&lt;");
-  return html(molde.replace("__DADOS__", json).replace("__TITULO__", titulo));
+  const extra = interno === "novo"
+    ? { "Set-Cookie": `${COOKIE_INTERNO}=1; Path=/; Max-Age=31536000; SameSite=Lax; Secure` }
+    : {};
+  return html(molde.replace("__DADOS__", json).replace("__TITULO__", titulo), 200, extra);
 }
